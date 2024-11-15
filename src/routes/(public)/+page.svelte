@@ -1,8 +1,7 @@
 <!-- src/routes/+page.svelte -->
 <script lang="ts">
     import {Button} from "$lib/components/ui/button";
-    import {Facebook, Twitter, Instagram, ChevronRight} from "svelte-lucide";
-    import logo from '$lib/assets/logo.png';
+    import {ChevronRight} from "svelte-lucide";
     import nyerere from '$lib/assets/nyerere.png';
     import money from '$lib/assets/money.png';
     import kiko from '$lib/assets/kiko.png';
@@ -12,7 +11,6 @@
     import pea from '$lib/assets/pea.png';
 
     import {Label} from "$lib/components/ui/label";
-    import Footer from "$lib/components/footer.svelte";
 
     const partners = [
         {
@@ -40,20 +38,6 @@
 </script>
 
 <div class="flex flex-col min-h-screen">
-
-    <header class="bg-white">
-        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-purple-600">
-                <img class="h-[100px]" alt="The project logo" src={logo}/>
-            </div>
-            <ul class="flex space-x-4">
-                <li><a href="/" class="text-gray-600 hover:text-purple-600">Home</a></li>
-                <li><a href="/events" class="text-gray-600 hover:text-purple-600">Events</a></li>
-                <li><a href="/swagz" class="text-gray-600 hover:text-purple-600">Swagz</a></li>
-                <li><a href="/about" class="text-gray-600 hover:text-purple-600">About</a></li>
-            </ul>
-        </nav>
-    </header>
 
     <main class="flex-grow">
         <section class="border my-16 md:my-24 overflow-hidden container flex justify-start relative rounded-2xl">
@@ -97,14 +81,12 @@
             </div>
             <div class="container grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
                 {#each partners as partner}
-                    <div class="flex items center">
-                        <img class="h-fit max-h-[250px]" alt="The project logo" src={partner.logo}/>
+                    <div class="flex items center relative h-[250px]">
+                        <img class="h-fit max-h-[250px] absolute object-contain" alt="The project logo" src={partner.logo}/>
                     </div>
                 {/each}
             </div>
         </section>
     </main>
-
-    <Footer/>
 
 </div>
