@@ -1,6 +1,5 @@
 <!-- src/routes/(public)/+layout.svelte -->
 <script lang="ts">
-	import "../../app.css";
     import {ScrollArea} from "$lib/components/ui/scroll-area";
     import Header from "$lib/components/header.svelte";
     import Footer from "$lib/components/footer.svelte";

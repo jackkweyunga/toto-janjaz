@@ -14,8 +14,9 @@
     }
 </script>
 
-<div class="min-h-screen bg-background flex items-center justify-center p-4">
+<div class="h-[500px] bg-background flex items-center justify-center p-4">
     <div class="w-full max-w-md space-y-8">
+
         <div class="text-center">
             <h2 class="mt-6 text-3xl font-bold tracking-tight text-primary">
                 Sign in to TotoJanjaz
@@ -36,19 +37,20 @@
             </div>
 
             <div class="mt-6 grid grid-cols-2 gap-3">
-                <Button variant="outline" class="w-full" on:click={handleGoogleSignIn}>
+                <Button variant="outline" class="w-full flex items-center" on:click={handleGoogleSignIn}>
                     <div class="h-5 w-5 mr-2">
                         <img src={Google} alt="google icon" />
                     </div>
-                    Google
+                    <span>Google</span>
                 </Button>
-                <Button variant="outline" class="w-full" on:click={handleAppleSignIn}>
+                <Button variant="outline" class="w-full flex items-center" on:click={handleAppleSignIn}>
                     <div class="h-5 w-5 mr-2">
                         <img alt="apple icon" src={Apple} />
                     </div>
-                    Apple
+                    <span>Apple</span>
                 </Button>
             </div>
         </div>
+
     </div>
 </div>

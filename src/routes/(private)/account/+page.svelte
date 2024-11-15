@@ -5,7 +5,6 @@
 </script>
 
 <svelte:head>
-
     <title>Account - Toto Janjaz</title>
 </svelte:head>
 
@@ -26,12 +25,3 @@
     </div>
     <Button type="submit">Update Details</Button>
 </form>
-
-<h2 class="text-2xl font-bold mt-8 mb-4">Children</h2>
-
-<div class="space-y-4">
-    <div class="p-4 bg-muted rounded-lg">
-        <p class="font-semibold">Novatus Mushi</p>
-    </div>
-    <Button variant="outline">Add Child</Button>
-</div>
