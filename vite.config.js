@@ -10,4 +10,7 @@ export default defineConfig({
       $lib: path.resolve("./src/lib"),
     },
   },
+  server: {
+    port: 3000
+  }
 })

@@ -1,7 +1,8 @@
 <script>
+    import logo from "$lib/assets/logo.png";
+    import {Button} from "$lib/components/ui/button";
+    import {page} from "$app/stores"
 
-import logo from "$lib/assets/logo.png";
-import {Button} from "$lib/components/ui/button";
 </script>
 
 <header class="bg-white">
@@ -14,13 +15,21 @@ import {Button} from "$lib/components/ui/button";
             <li><a href="/events" class="text-gray-600 hover:text-purple-600">Events</a></li>
             <li><a href="/swagz" class="text-gray-600 hover:text-purple-600">Swagz</a></li>
             <li><a href="/about" class="text-gray-600 hover:text-purple-600">About</a></li>
-            <li>
-                <a href="/login">
-                    <Button>
-                        Sign In
-                    </Button>
-                </a>
-            </li>
+            {#if $page.data.session }
+                <li>
+                    <a href="/account" class="text-gray-600 hover:text-purple-600">
+                        Account
+                    </a>
+                </li>
+            {:else}
+                <li>
+                    <a href="/login">
+                        <Button>
+                            Sign In
+                        </Button>
+                    </a>
+                </li>
+            {/if}
         </ul>
     </nav>
 </header>

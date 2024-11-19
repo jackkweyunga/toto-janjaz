@@ -6,7 +6,7 @@
     import logo from "$lib/assets/logo.png";
 
     const navigation = [
-        {name: 'Home', href: '/dashboard', icon: Home},
+        {name: 'Home', href: '/', icon: Home},
         {name: 'Events', href: '/events', icon: Calendar},
         {name: 'Transactions', href: '/transactions', icon: FileText},
         {name: 'Support', href: '/support', icon: Headphones},
@@ -14,14 +14,13 @@
 
     const data = {
         user: {
-            name: "shadcn",
-            email: "m@example.com",
-            avatar: "/avatars/shadcn.jpg",
+            name: $page.data.session?.user?.name!,
+            email: $page.data.session?.user?.email!,
+            avatar: $page.data.session?.user?.image!,
         },
     }
 
     const currentPath = $derived($page.url.pathname);
-
 
 </script>
 
@@ -63,7 +62,6 @@
                         <Sidebar.MenuButton
                                 isActive={currentPath === item.href}
                                 class="w-full"
-
                         >
                             <item.icon
                                     class="h-5 w-5 {currentPath === item.href ? 'text-primary' : ''}"/>
