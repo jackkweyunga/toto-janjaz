@@ -13,4 +13,5 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
         verificationTokensTable: verificationTokens,
     }),
     providers: [Google],
+    trustHost: true
 }) 
