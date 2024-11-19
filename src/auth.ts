@@ -1,4 +1,3 @@
-
 import { SvelteKitAuth } from "@auth/sveltekit"
 import Google from "@auth/sveltekit/providers/google"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
@@ -14,4 +13,4 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
     }),
     providers: [Google],
     trustHost: true
-}) 
+})

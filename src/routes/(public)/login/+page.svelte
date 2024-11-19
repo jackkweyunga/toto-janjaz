@@ -29,9 +29,6 @@
             <h2 class="mt-6 text-3xl font-bold tracking-tight text-primary">
                 Sign in to TotoJanjaz
             </h2>
-            <p class="mt-2 text-sm text-muted-foreground">
-                Or <a href="/register" class="font-medium text-primary hover:text-primary/80">create an account</a> if you don't have one
-            </p>
         </div>
 
         <div class="mt-6">
