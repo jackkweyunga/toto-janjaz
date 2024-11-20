@@ -31,3 +31,47 @@ export const addChildSchema = z.object({
 });
 
 export type AddChildSchema = typeof addChildSchema;
+
+
+export const updateUserSchema = z.object({
+    phone: z.string().nullable(),
+    role: z.string({
+        required_error: "Please provide the role"
+    }).default("parent"),
+    is_admin: z.boolean().default(false),
+    userId: z.string()
+})
+
+export type UpdateUserSchema = typeof updateUserSchema;
+
+
+export const addEventSchema = z.object({
+    name: z.string({
+        required_error: "Event name is required"
+    }).min(5, {
+        message: "Name should have more than 5 characters"
+    }),
+    status: z.enum(["draft", "archived", "published"]).default("draft"),
+    description: z.string({
+        required_error: "Event description is required"
+    }).min(10, {
+        message: "Description should have more that 10 characters"
+    }),
+    createdBy: z.string({
+        required_error: "Created by is required"
+    }),
+    startDate: z.date({
+        required_error: "Start date is required"
+    }).refine(x => x > new Date(), "Start date must be in the future"),
+    endDate: z.date().nullable(),
+    location: z.string({
+        required_error: "Location is required"
+    }).min(5, { message: "Location should have more that 5 characters"}),
+    maxParticipants: z.number().min(1, { message: "Can not have less than 1 participant"}).nullable()
+})
+
+export type AddEventSchema = typeof addEventSchema
+
+
+
+

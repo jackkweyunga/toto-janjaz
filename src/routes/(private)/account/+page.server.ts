@@ -22,6 +22,10 @@ export const load: PageServerLoad = async ({request, locals}) => {
         zod(updatedAddChildSchema)
     );
 
+    const updateChildForm = await superValidate(
+        zod(updatedAddChildSchema)
+    );
+
     const dietaryOptions = [
         'Vegetarian',
         'Vegan',

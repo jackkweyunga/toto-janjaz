@@ -6,9 +6,9 @@
     import logo from "$lib/assets/logo.png";
 
     const navigation = [
-        {name: 'Home', href: '/', icon: Home},
-        {name: 'Events', href: '/events', icon: Calendar},
-        {name: 'Transactions', href: '/transactions', icon: FileText},
+        {name: 'Home', href: '/account', icon: Home},
+        {name: 'Events', href: '/account/events', icon: Calendar},
+        {name: 'Transactions', href: '/account/transactions', icon: FileText},
         {name: 'Support', href: '/support', icon: Headphones},
     ];
 

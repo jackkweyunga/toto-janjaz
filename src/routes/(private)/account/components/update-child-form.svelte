@@ -45,10 +45,10 @@
 
 </script>
 
-<Card class="w-full border-none mx-auto">
+<Card class="w-full max-w-2xl border-none mx-auto">
 
     <form
-            action="?/register"
+            action="?/update"
             method="POST"
             class="space-y-4"
             use:enhance

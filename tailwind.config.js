@@ -1,5 +1,8 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 import tailwindcssAnimate from "tailwindcss-animate";
+import typography from "@tailwindcss/typography";
+import containerQueries from "@tailwindcss/container-queries";
+import aspectRatio from "@tailwindcss/aspect-ratio";
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -90,7 +93,7 @@ const config = {
       		},
 		},
 	},
-	plugins: [tailwindcssAnimate],
+	plugins: [typography, containerQueries, aspectRatio, tailwindcssAnimate]
 };
 
 export default config;

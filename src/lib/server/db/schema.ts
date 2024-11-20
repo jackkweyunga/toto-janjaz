@@ -11,6 +11,7 @@ import { createId } from '@paralleldrive/cuid2';
 
 // Enums
 export const userRoleEnum = pgEnum('user_role', ['parent', 'admin']);
+export const eventStatusEnum = pgEnum("event_status", ['draft', 'published', 'archived'])
 export const genderEnum = pgEnum('gender', ['male', 'female', 'other']);
 export const relationshipEnum = pgEnum('relationship', ['parent', 'guardian', 'sibling', 'other']);
 
@@ -24,6 +25,7 @@ export const users = pgTable("user", {
     emailVerified: timestamp("emailVerified", {mode: "date"}),
     image: text("image"),
     role: userRoleEnum('role').default('parent').notNull(),
+    is_admin: boolean("is_admin").default(false),
     phone: text("phone"),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -124,11 +126,12 @@ export const events = pgTable('events', {
         .primaryKey()
         .$defaultFn(() => createId()),
     name: varchar('name', {length: 255}).notNull(),
+    status: eventStatusEnum('status').default('draft').notNull(),
     createdBy: text('created_by').notNull().references(() => users.id),
-    description: text('description'),
+    description: text('description').notNull(),
     startDate: timestamp('start_date').notNull(),
-    endDate: timestamp('end_date').notNull(),
-    location: varchar('location', {length: 255}),
+    endDate: timestamp('end_date'),
+    location: varchar('location', {length: 255}).notNull(),
     maxParticipants: integer('max_participants'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),

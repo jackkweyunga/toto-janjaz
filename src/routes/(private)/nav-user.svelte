@@ -57,10 +57,10 @@
                 </DropdownMenu.Label>
                 <DropdownMenu.Separator/>
                 <DropdownMenu.Group>
-                    <a href="/account">
+                    <a href="/account/profile">
                         <DropdownMenu.Item>
                             <BadgeCheck/>
-                            Account
+                            Profile
                         </DropdownMenu.Item>
                     </a>
                     <DropdownMenu.Item>
