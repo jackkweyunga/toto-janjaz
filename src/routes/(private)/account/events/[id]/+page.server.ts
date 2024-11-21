@@ -2,8 +2,12 @@
 import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
-import { events, rsvps, transactions } from '$lib/server/db/schema';
+import {children, events, rsvps, transactions } from '$lib/server/db/schema';
 import { eq, and, gte } from 'drizzle-orm';
+import {getUserByEmail} from "$lib/server/db/actions";
+import {rsvpSchema} from "$lib/schema";
+import {superValidate} from "sveltekit-superforms";
+import {zod} from "sveltekit-superforms/adapters";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     const session = await locals.auth();
@@ -11,7 +15,13 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         throw error(401, 'Please login to view events');
     }
 
+    const user = await getUserByEmail(session?.user?.email!);
+
     const eventId = params.id;
+
+    const form = await superValidate(
+        zod(rsvpSchema)
+    );
 
     try {
         // Get event
@@ -32,16 +42,16 @@ export const load: PageServerLoad = async ({ locals, params }) => {
             }
         });
 
-        console.log('Event:', event);
-
         if (event === undefined) {
             return fail(404, { message: 'Event not found' });
         }
 
         // Get user's children
         const userChildren = await db.query.children.findMany({
-            where: (children, { eq }) => eq(children.parentId, session.user?.id as string)
+            where: (wherechildren, { eq }) => eq(children.parentId, user?.id as string)
         });
+
+        console.log('User children:', userChildren);
 
         // Enhance events with registration info
         const enhancedEvent = {
@@ -55,6 +65,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         };
 
         return {
+            rsvpForm: form,
             event: enhancedEvent,
             children: userChildren
         };

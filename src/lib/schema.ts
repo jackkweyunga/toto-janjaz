@@ -72,6 +72,23 @@ export const addEventSchema = z.object({
 
 export type AddEventSchema = typeof addEventSchema
 
+export const rsvpSchema = z.object({
+    eventId: z.string().min(1, "Event ID is required"),
+    childrenIds: z.array(z.string()).min(1, "Please select at least one child"),
+    phone: z.string()
+        .min(10, "Phone number must be at least 10 digits")
+        .regex(/^\d+$/, "Phone number must contain only digits"),
+    participation_permission: z.boolean()
+        .refine(val => val, "You must agree to the participation permission"),
+    media_permission: z.boolean()
+        .refine(val => val, "You must agree to the media permission"),
+    payment_currency: z.enum(["TZS", "USD"]).default("TZS"),
+    payment_amount: z.string().min(1, "Payment amount is required"),
+    payment_method: z.enum(["mobile", "bank"]).default("mobile"),
+});
+
+export type RsvpSchema = typeof rsvpSchema;
+
 
 
 

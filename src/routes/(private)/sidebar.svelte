@@ -117,7 +117,6 @@
                     {/each}
                 </Sidebar.Menu>
             </Sidebar.Group>
-
             <Sidebar.Group>
                 <Sidebar.GroupLabel>Administration</Sidebar.GroupLabel>
                 <Sidebar.Menu>
@@ -164,8 +163,6 @@
                     {/each}
                 </Sidebar.Menu>
             </Sidebar.Group>
-
-
         </Sidebar.Menu>
     </Sidebar.Content>
 
