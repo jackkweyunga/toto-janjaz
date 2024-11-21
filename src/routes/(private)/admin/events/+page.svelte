@@ -11,7 +11,7 @@
 
     <div class="flex justify-between items-center">
         <h2 class="text-2xl font-bold mt-8 mb-4">Events</h2>
-        <a href={`/account/events/add`} class="">
+        <a href={`/admin/events/add`} class="">
             <Button variant="outline">
                 <Plus/>
                 Add
