@@ -1,15 +1,15 @@
 <!-- src/routes/events/+page.svelte -->
 <script lang="ts">
-    import { enhance } from '$app/forms';
-    import { Calendar, Clock, MapPin, Users } from 'lucide-svelte';
+    import {enhance} from '$app/forms';
+    import {Calendar, Clock, MapPin, Users} from 'lucide-svelte';
     import * as Dialog from '$lib/components/ui/dialog';
     import * as Card from '$lib/components/ui/card';
-    import { Button } from '$lib/components/ui/button';
-    import { Badge } from '$lib/components/ui/badge';
-    import { Checkbox } from '$lib/components/ui/checkbox';
-    import { Label } from '$lib/components/ui/label';
-    import { toast } from 'svelte-sonner';
-    import type { PageData, ActionData } from './$types';
+    import {Button} from '$lib/components/ui/button';
+    import {Badge} from '$lib/components/ui/badge';
+    import {Checkbox} from '$lib/components/ui/checkbox';
+    import {Label} from '$lib/components/ui/label';
+    import {toast} from 'svelte-sonner';
+    import type {PageData, ActionData} from './$types';
 
     export let data: PageData;
     export let form: ActionData;
@@ -82,15 +82,19 @@
                 <Card.Content>
                     <div class="space-y-2">
                         <div class="flex items-center gap-2">
-                            <Calendar class="h-4 w-4" />
+                            <Calendar class="h-4 w-4"/>
                             <span>{formatDate(event.startDate)}</span>
+                            {#if (event.endDate)}
+                                <span> - </span>
+                                <span>{formatDate(event.endDate)}</span>
+                            {/if}
                         </div>
+                        <!--                        <div class="flex items-center gap-2">-->
+                        <!--                            <Clock class="h-4 w-4" />-->
+                        <!--                            <span>{formatTime(event.startDate)} - {formatTime(event.endDate)}</span>-->
+                        <!--                        </div>-->
                         <div class="flex items-center gap-2">
-                            <Clock class="h-4 w-4" />
-                            <span>{formatTime(event.startDate)} - {formatTime(event.endDate)}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <MapPin class="h-4 w-4" />
+                            <MapPin class="h-4 w-4"/>
                             <span>{event.location}</span>
                         </div>
 
@@ -119,13 +123,14 @@
                             if (result.type === 'success') {
                               toast.success('Registration cancelled');
                             } else if (result.type === 'failure') {
-                              toast.error(result.data?.message || 'Failed to cancel registration');
+                              toast.error(result.data?.message?.toString() || 'Failed to cancel registration');
                             }
                           };
                         }}
                                             >
-                                                <input type="hidden" name="rsvpId" value={registration.id} />
-                                                <Button variant="destructive" size="sm" type="submit" disabled={isSubmitting}>
+                                                <input type="hidden" name="rsvpId" value={registration.id}/>
+                                                <Button variant="destructive" size="sm" type="submit"
+                                                        disabled={isSubmitting}>
                                                     Cancel
                                                 </Button>
                                             </form>
@@ -138,91 +143,14 @@
                 </Card.Content>
 
                 <Card.Footer class="flex justify-end">
-                    <Button
-                            on:click={() => openDialog(event)}
-                            disabled={event.spotsAvailable === 0}
-                    >
-                        {event.spotsAvailable === 0 ? 'Fully Booked' : 'Register Children'}
-                    </Button>
+                    <a href={`/account/events/${event.id}`}>
+                        <Button>
+                            Register children
+                        </Button>
+                    </a>
                 </Card.Footer>
             </Card.Root>
         {/each}
     </div>
 </div>
 
-<Dialog.Root bind:open={dialogOpen}>
-    <Dialog.Content>
-        <Dialog.Header>
-            <Dialog.Title>Select Children to Register</Dialog.Title>
-            <Dialog.Description>
-                {#if currentEvent}
-                    Choose which children you'd like to register for {currentEvent.name}
-                    {#if currentEvent.price}
-                        <div class="mt-2">
-                            Price per child: {formatPrice(currentEvent.price)}
-                        </div>
-                    {/if}
-                {/if}
-            </Dialog.Description>
-        </Dialog.Header>
-
-        <form
-                method="POST"
-                action="?/register"
-                class="space-y-4"
-                use:enhance={() => {
-        isSubmitting = true;
-        return async ({ result }) => {
-          isSubmitting = false;
-          if (result.type === 'success') {
-            dialogOpen = false;
-            toast.success('Registration successful');
-            if (result.data.requiresPayment) {
-              // Here you would handle payment flow
-              toast.info('Please complete payment to confirm registration');
-            }
-          } else if (result.type === 'failure') {
-            toast.error(result.data?.message || 'Registration failed');
-          }
-        };
-      }}
-        >
-            {#if currentEvent}
-                <input type="hidden" name="eventId" value={currentEvent.id} />
-            {/if}
-
-            <div class="space-y-4 py-4">
-                {#each children as child}
-                    <div class="flex items-center space-x-2">
-                        <Checkbox
-                                id={`child-${child.id}`}
-                                name="childrenIds[]"
-                                value={child.id}
-                                checked={selectedChildren[child.id] || false}
-                                onCheckedChange={(checked) => {
-                selectedChildren[child.id] = checked;
-                selectedChildren = selectedChildren;
-              }}
-                        />
-                        <Label for={`child-${child.id}`}>
-                            {child.fullName} ({child.age} years old)
-                        </Label>
-                    </div>
-                {/each}
-            </div>
-
-            {#if form?.message}
-                <p class="text-destructive text-sm">{form.message}</p>
-            {/if}
-
-            <Dialog.Footer>
-                <Button
-                        type="submit"
-                        disabled={isSubmitting || !Object.values(selectedChildren).some(Boolean)}
-                >
-                    {isSubmitting ? 'Registering...' : 'Confirm Registration'}
-                </Button>
-            </Dialog.Footer>
-        </form>
-    </Dialog.Content>
-</Dialog.Root>
