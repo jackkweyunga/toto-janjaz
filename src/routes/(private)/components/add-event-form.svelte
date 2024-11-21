@@ -22,7 +22,7 @@
     import {Separator} from "$lib/components/ui/separator";
     import type {Session} from "@auth/sveltekit";
     import type {users} from "$lib/server/db/schema";
-    import {CalendarIcon} from "lucide-svelte";
+    import {CalendarIcon, Loader2} from "lucide-svelte";
     import type {DateRange} from "bits-ui";
     import {
         CalendarDate,
@@ -31,12 +31,14 @@
         getLocalTimeZone, today
     } from "@internationalized/date";
     import {cn} from "$lib/utils.js";
-    import {buttonVariants} from "$lib/components/ui/button/index.js";
-    import {RangeCalendar} from "$lib/components/ui/range-calendar/index.js";
-    import * as Popover from "$lib/components/ui/popover/index.js";
+    import {buttonVariants} from "$lib/components/ui/button";
+    import {RangeCalendar} from "$lib/components/ui/range-calendar";
+    import * as Popover from "$lib/components/ui/popover";
     import {Label} from "$lib/components/ui/label";
     import {onMount, onDestroy} from 'svelte';
     import TipTapEditor from './tip-tap-editor.svelte'
+    import {toast} from "svelte-sonner";
+    import {invalidateAll} from "$app/navigation";
 
     const df = new DateFormatter("en-US", {
         dateStyle: "medium"
@@ -55,14 +57,32 @@
     } = $props()
 
     const form = superForm(addEventForm, {
+        validationMethod: 'auto',
+        invalidateAll: 'force',
+        dataType: 'json',
+        taintedMessage: null,
         validators: zodClient(addEventSchema),
+        onResult: async ({result, formElement}) => {
+
+            if (result.type === "success") {
+                toast.success(result.data?.form?.message || "success")
+            }
+
+        },
+        onError: async ({result}) => {
+            toast.error(result.error.message)
+        }
     });
 
-    const {form: formData, enhance} = form;
+    const {form: formData, enhance, submitting} = form;
+    const isSubmitting = $derived(submitting);
+    // @ts-ignore
+    const isValid = $derived($formData.valid);
+
 
     const {value: startDate} = formFieldProxy(form, 'startDate');
     const {value: endDate} = formFieldProxy(form, 'endDate');
-    const { value: content } = formFieldProxy(form, 'description')
+    const {value: content} = formFieldProxy(form, 'description')
 
 
     onMount(() => {
@@ -225,7 +245,7 @@
                     {#snippet children({props})}
                         <Form.Label>Event Description</Form.Label>
                         <TipTapEditor bind:content={$content}/>
-                        <Input type="hidden" {...props} value={$content} />
+                        <Input type="hidden" {...props} value={$content}/>
                     {/snippet}
                 </Form.Control>
                 <Form.FieldErrors/>
@@ -234,10 +254,18 @@
         </div>
 
 
-
         <Separator/>
         <div class="p-4">
-            <Button type="submit" class="w-full">Save Event</Button>
+            <Button
+                    disabled={$isSubmitting}
+                    type="submit" class="w-full">
+                {#if $submitting}
+                    <Loader2 class="mr-2 h-4 w-4 animate-spin"/>
+                    Saving...
+                {:else }
+                    <span>Save event</span>
+                {/if}
+            </Button>
         </div>
 
     </form>

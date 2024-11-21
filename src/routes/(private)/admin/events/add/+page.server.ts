@@ -41,6 +41,6 @@ export const actions = {
             ...addEventForm.data
         })
 
-        return message(addEventForm, {text: "Event added successfully."});
+        return message(addEventForm, "Event added successfully.");
     }
 } satisfies Actions;

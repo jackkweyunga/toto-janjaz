@@ -1,5 +1,5 @@
 <script>
-    import { toggleBold, toggleItalic, toggleStrike } from './button-actions.js';
+    import { toggleBold, toggleItalic, toggleStrike } from './button-actions.ts';
     export let editor;
     import Button from './bubble-menu-button.svelte';
 </script>

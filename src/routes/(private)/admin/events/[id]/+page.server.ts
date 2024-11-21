@@ -40,21 +40,22 @@ export const load: PageServerLoad = async ({request, locals, params}) => {
 };
 
 export const actions = {
-    edit: async ({request}) => {
-        const addEventForm = await superValidate(request, zod(addEventSchema.merge(z.object({
+    register: async ({request}) => {
+        const editEventForm = await superValidate(request, zod(addEventSchema.merge(z.object({
             id: z.string()
         }))));
 
-        console.log("Edit event form: ", addEventForm);
+        console.log("Edit event form: ", editEventForm);
 
-        if (!addEventForm.valid) return fail(400, {addEventForm});
+        if (!editEventForm.valid) return fail(400, {editEventForm});
 
-        const {id, ...rest} = addEventForm.data;
+        const {id, ...rest} = editEventForm.data;
 
         await db.update(events).set({
             ...rest
-        }).where(eq(events.id, id))
+        }).where(eq(events.id, id)).execute()
 
-        return message(addEventForm, {text: "Event edited successfully."});
+        return message(editEventForm, "Event edited successfully.");
+
     }
 } satisfies Actions;

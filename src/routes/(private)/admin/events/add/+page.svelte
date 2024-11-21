@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import AddEventForm from "../../components/add-event-form.svelte"
+    import AddEventForm from "../../../components/add-event-form.svelte"
     import type {PageData} from "./$types";
 
     let {data}: { data: PageData } = $props();

@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import type {PageData} from "./$types";
-    import UpdateProfileForm from "../components/update-profile-form.svelte"
+    import UpdateProfileForm from "../../components/update-profile-form.svelte"
 
     let {data}: { data: PageData } = $props();
 

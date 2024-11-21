@@ -10,7 +10,7 @@
     import * as Dialog from "$lib/components/ui/dialog";
     import {Input} from "$lib/components/ui/input";
     import {Label} from "$lib/components/ui/label";
-    import AddChildForm from "./components/add-child-form.svelte"
+    import AddChildForm from "../components/add-child-form.svelte"
     import {ScrollArea} from "$lib/components/ui/scroll-area";
     import * as Avatar from "$lib/components/ui/avatar";
 
