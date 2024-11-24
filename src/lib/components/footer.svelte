@@ -1,10 +1,10 @@
 <script lang="ts">
     import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'svelte-lucide';
-    import logo from '$lib/assets/logo.png';
+    import logo from '$lib/assets/round logo totojanja.png';
 
 </script>
 
-<footer class="bg-[#8B5CF6] text-white">
+<footer class="bg-[#8354A4] text-white">
     <div class="container px-4 py-12 mx-auto">
         <div class="grid gap-8 lg:grid-cols-4">
             <!-- Logo and Social Section -->
@@ -12,12 +12,10 @@
                 <img
                         src={logo}
                         alt="Toto Janjaz"
-                        width="120"
-                        height="120"
-                        class="rounded-full bg-white p-2"
+
                 />
-                <p class="max-w-xs text-sm opacity-90">
-                    Lorem ipsum dolor sit amet consectetur adipiscing elit aliquam
+                <p class="max-w-xs text-sm opacity-90 ">
+                    Imagine with Us!
                 </p>
                 <div class="flex gap-4">
                     <a href="/" class="hover:opacity-80">
@@ -71,23 +69,23 @@
                 <ul class="space-y-3">
                     <li class="flex items-center gap-2">
                         <Mail class="h-5 w-5" />
-                        <a href="mailto:contact@company.com" class="hover:underline">
-                            contact@company.com
+                        <a href="mailto:totojanjaz@gmail.com" class="hover:underline">
+                            totojanjaz@gmail.com
                         </a>
                     </li>
                     <li class="flex items-center gap-2">
                         <Phone class="h-5 w-5" />
-                        <a href="tel:(414) 687 - 5892" class="hover:underline">
-                            (414) 687 - 5892
+                        <a href="tel:+255692370870" class="hover:underline">
+                            +255 692370870
                         </a>
                     </li>
-                    <li class="flex items-start gap-2">
+                    <!--<li class="flex items-start gap-2">
                         <MapPin class="h-5 w-5 mt-1" />
                         <address class="not-italic">
                             794 Mcallister St<br />
                             San Francisco, 94102
                         </address>
-                    </li>
+                    </li>-->
                 </ul>
             </div>
         </div>
@@ -97,7 +95,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
                 <p>
                     Designed & Developed by
-                    <a href="/" class="underline hover:opacity-80">SeedeXR</a>
+                    <a href="https://seedexr.com" class="underline hover:opacity-80">SeedeXR</a>
                 </p>
                 <div class="flex gap-4">
                     <p>All Rights Reserved |</p>
