@@ -6,14 +6,15 @@
     import { page } from "$app/stores"
 
     function handleGoogleSignIn() {
-        // Handle Google sign in
+        const searchParams = new URLSearchParams(window.location.search)
+        const next = searchParams.get('next')
+
         signIn("google", {
             redirect: true,
-            callbackUrl: $page.data.redirectTo
-                ? `/${decodeURIComponent($page.data.redirectTo).slice(1)}`
-                : `/account`,
+            callbackUrl: next
+                ? `/${decodeURIComponent(next).slice(1)}`
+                : '/account',
         })
-        console.log("Sign in with Google");
     }
 
     function handleAppleSignIn() {
