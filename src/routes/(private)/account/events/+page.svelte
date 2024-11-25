@@ -10,6 +10,7 @@
     import {Label} from '$lib/components/ui/label';
     import {toast} from 'svelte-sonner';
     import type {PageData, ActionData} from './$types';
+    import {invalidateAll} from "$app/navigation";
 
     export let data: PageData;
     export let form: ActionData;
@@ -49,6 +50,7 @@
         selectedChildren = {};
         dialogOpen = true;
     }
+
 </script>
 
 <div class="max-w-6xl mx-auto p-6">
@@ -116,6 +118,7 @@
                           return async ({ result }) => {
                             isSubmitting = false;
                             if (result.type === 'success') {
+                                await invalidateAll()
                               toast.success('Registration cancelled');
                             } else if (result.type === 'failure') {
                               toast.error(result.data?.message?.toString() || 'Failed to cancel registration');

@@ -68,6 +68,8 @@
                 toast.success(result.data?.form?.message || "success")
             }
 
+            await invalidateAll()
+
         },
         onError: async ({result}) => {
             toast.error(result.error.message)
@@ -281,7 +283,7 @@
 
     </form>
 
-    <SuperDebug data={{formData: $formData, dateRangeValue}}></SuperDebug>
+<!--    <SuperDebug data={{formData: $formData, dateRangeValue}}></SuperDebug>-->
 
 </Card>
 
