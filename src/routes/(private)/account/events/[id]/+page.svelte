@@ -140,38 +140,40 @@
         </div>
     {/if}
 
-    <Dialog.Root open={$isOpen} onOpenChange={(x) => $isOpen = x}>
-        <Dialog.Trigger type="button" class={"w-full" + buttonVariants({ variant: "default" })}>
-            <Plus/>
-            Add Child
-        </Dialog.Trigger>
-        <Dialog.Content class="sm:max-w-[512px] h-[90vh] px-0">
-            <div class="px-4">
-                <Dialog.Header>
-                    <Dialog.Title>Add Child</Dialog.Title>
-                    <Dialog.Description>
-                        Add a child to your account
-                    </Dialog.Description>
-                </Dialog.Header>
-            </div>
-            <Separator/>
-            <ScrollArea class="h-full">
-                {#if (data.session && data.user && data.addChildForm && data.dietaryOptions)}
-                    <AddChildForm addChildForm={data.addChildForm} dietaryOptions={data.dietaryOptions}
-                                  session={data.session} user={data.user}
-                                  onSuccess={async () => {
+    {#if $currentStep === 1}
+        <Dialog.Root open={$isOpen} onOpenChange={(x) => $isOpen = x}>
+            <Dialog.Trigger type="button" class={"w-full" + buttonVariants({ variant: "default" })}>
+                <Plus/>
+                Add Child
+            </Dialog.Trigger>
+            <Dialog.Content class="sm:max-w-[512px] h-[90vh] px-0">
+                <div class="px-4">
+                    <Dialog.Header>
+                        <Dialog.Title>Add Child</Dialog.Title>
+                        <Dialog.Description>
+                            Add a child to your account
+                        </Dialog.Description>
+                    </Dialog.Header>
+                </div>
+                <Separator/>
+                <ScrollArea class="h-full">
+                    {#if (data.session && data.user && data.addChildForm && data.dietaryOptions)}
+                        <AddChildForm addChildForm={data.addChildForm} dietaryOptions={data.dietaryOptions}
+                                      session={data.session} user={data.user}
+                                      onSuccess={async () => {
                                                   await invalidateAll();
                                                   $isOpen = false
                                              }}
-                    />
-                {/if}
-            </ScrollArea>
-        </Dialog.Content>
-    </Dialog.Root>
+                        />
+                    {/if}
+                </ScrollArea>
+            </Dialog.Content>
+        </Dialog.Root>
+    {/if}
 
     <form
             method="POST"
-            action="?/register"
+            action="?/rsvp"
             class="space-y-4"
             use:enhance
     >

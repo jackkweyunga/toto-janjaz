@@ -2,8 +2,8 @@
 <script lang="ts">
     import {onMount, onDestroy} from 'svelte';
     import type {PaymentRequest} from '$lib/server/services/zenopay';
-    import {Input} from "$lib/components/ui/Input";
-    import {Label} from "$lib/components/ui/Label";
+    import {Input} from "$lib/components/ui/input";
+    import {Label} from "$lib/components/ui/label";
     import {Button} from "$lib/components/ui/button";
     import type {users} from "$lib/server/db/schema";
 

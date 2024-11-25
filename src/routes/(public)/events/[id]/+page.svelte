@@ -8,22 +8,29 @@
 
 </script>
 
-<div class="container mx-auto px-4 py-12 max-w-6xl">
+
+<svelte:head>
+    <title>{event?.name} - Toto Janjaz</title>
+</svelte:head>
+
+<div class="container mx-auto px-4 py-12 max-w-3xl">
     <section class="space-y-12">
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-[#8657b3] max-w-4xl mx-auto leading-tight">
-                {event.name}
+                {event?.name}
             </h1>
         </div>
 
-        <div class="prose prose-lg max-w-none">
+        <div class="prose prose-lg">
             {@html event?.description}
         </div>
 
         <div class="text-center">
-            <Button class="bg-[#8657b3] text-white hover:bg-[#6f4696] px-8 py-2 rounded-md text-lg">
-                RSVP Now
-            </Button>
+            <a href="/account/events/{event?.id}" >
+                <Button size="lg">
+                    RSVP Now
+                </Button>
+            </a>
         </div>
 
     </section>

@@ -12,6 +12,7 @@ import {z} from "zod";
 import {createId} from "@paralleldrive/cuid2";
 import { redirect } from '@sveltejs/kit';
 
+
 export const load: PageServerLoad = async ({locals, params}) => {
     const session = await locals.auth();
     if (!session?.user) {
@@ -102,7 +103,20 @@ export const load: PageServerLoad = async ({locals, params}) => {
 };
 
 export const actions = {
-    register: async ({request, locals}) => {
+    register: async ({request}) => {
+        const addChildForm = await superValidate(request, zod(addChildSchema));
+
+        // console.log("Add Child form: ", addChildForm);
+
+        if (!addChildForm.valid) return fail(400, {addChildForm});
+
+        await db.insert(children).values({
+            ...addChildForm.data
+        })
+
+        return message(addChildForm, {text: "Child added successfully."});
+    },
+    rsvp: async ({request, locals}) => {
         const session = await locals.auth();
         if (!session?.user) {
             return fail(401, {message: 'Unauthorized'});
