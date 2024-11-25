@@ -1,6 +1,6 @@
 <script lang="ts">
     import {page} from '$app/stores';
-    import {Home, Calendar, FileText, Headphones, LogOut} from 'lucide-svelte';
+    import {Home, Calendar, FileText, Headphones, LogOut, Users2} from 'lucide-svelte';
     import NavUser from './nav-user.svelte';
     import logo from "$lib/assets/logo.png";
     import type {users} from "$lib/server/db/schema";
@@ -27,6 +27,7 @@
     const navigation: Navigation = [
         {title: 'Home', isActive: true, url: '/account', icon: Home},
         {title: 'Events', isActive: true, url: '/account/events', icon: Calendar},
+        {title: 'Children', isActive: true, url: '/account/children', icon: Users2},
         {title: 'Support', isActive: true, url: '/support', icon: Headphones}
     ];
 
@@ -42,10 +43,21 @@
                     url: "/admin/events",
                 },
                 {
-                    title: 'Transactions',
-                    url: '/account/transactions'
+                    title: "RSVPs",
+                    url: "/admin/rsvps",
                 },
-
+                {
+                    title: 'Transactions',
+                    url: '/admin/transactions'
+                },
+                {
+                    title: 'Users',
+                    url: '/admin/users'
+                },
+                {
+                    title: 'Test Payment',
+                    url: '/admin/test-payment'
+                }
             ],
         }
     ]

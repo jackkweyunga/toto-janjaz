@@ -1,7 +1,6 @@
 <script lang="ts">
     import {type PageData} from './$types';
-    import {Button} from "$lib/components/ui/button";
-    import {Badge} from "$lib/components/ui/badge";
+    import {Label} from "$lib/components/ui/label";
 
     let {data}: { data: PageData } = $props();
 
@@ -57,29 +56,23 @@
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="p-2">
                                         <span class="px-2 py-1 rounded-full text-sm {rsvp.transaction?.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
-                                            {rsvp.transaction?.status === "completed" ? "reserved" : "pending"}
+                                            {rsvp.transaction?.status}
                                         </span>
                                 </td>
-                                <td class="p-2">{rsvp?.child?.fullName || 'N/A'}</td>
+                                <td class="p-2">
+                                    <div class="flex flex-col">
+                                        <h3>{rsvp?.child?.fullName || 'N/A'}</h3>
+                                        <Label class="text-muted-foreground">{rsvp?.child?.parent?.name}</Label>
+                                    </div>
+                                </td>
                                 <td class="p-2">{rsvp?.event?.name || 'N/A'}</td>
                                 <td class="p-2">
                                     {#if rsvp.transaction?.status === 'completed'}
                                         <span class="text-green-600">✓ Paid</span>
                                     {:else}
-                                        <div class="flex flex-col gap-2">
-                                            <div>
-                                                <Badge variant="outline">
-                                                    {rsvp.transaction?.status || 'N/A'}
-                                                </Badge>
-                                            </div>
-                                            <div>
-                                                <a href="/account/pay/{rsvp.transaction?.id}" class="text-blue-600 underline">
-                                                    <Button>
-                                                        view
-                                                    </Button>
-                                                </a>
-                                            </div>
-                                        </div>
+                                        <span class="text-red-600">
+                                            {rsvp.transaction?.status || 'N/A'}
+                                        </span>
                                     {/if}
                                 </td>
                                 <td class="p-2">{formatDate(rsvp.createdAt)}</td>

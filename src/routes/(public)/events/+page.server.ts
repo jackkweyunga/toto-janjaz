@@ -2,17 +2,12 @@
 import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
-import { events, rsvps, transactions } from '$lib/server/db/schema';
-import { eq, and, gte } from 'drizzle-orm';
-import {getUserByEmail} from "$lib/server/db/actions";
 
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.auth();
     if (!session?.user) {
         throw error(401, 'Please login to view events');
     }
-
-    const user = await getUserByEmail(session?.user?.email!);
 
     try {
         // Get published events that haven't ended yet
@@ -40,16 +35,15 @@ export const load: PageServerLoad = async ({ locals }) => {
         const enhancedEvents = publishedEvents.map(event => ({
             ...event,
             spotsAvailable: event.maxParticipants ? event.maxParticipants - event.rsvps.filter(r =>
-                r.transaction?.status === 'completed'
+                r.status === 'confirmed'
             ).length : null,
             userRegistrations: event.rsvps.filter(r =>
-                r.parentId === user?.id as string
+                r.parentId === session.user?.id as string
             )
         }));
 
         return {
             events: enhancedEvents,
-            children: userChildren
         };
     } catch (err) {
         console.error('Error loading events:', err);

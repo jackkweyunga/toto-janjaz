@@ -1,12 +1,10 @@
 // src/routes/events/+page.server.ts
-import { error, fail } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
-import { db } from '$lib/server/db';
-import { events, rsvps, transactions } from '$lib/server/db/schema';
-import { eq, and, gte } from 'drizzle-orm';
+import {error, fail} from '@sveltejs/kit';
+import type {PageServerLoad} from './$types';
+import {db} from '$lib/server/db';
 import {getUserByEmail} from "$lib/server/db/actions";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({locals, params}) => {
     const session = await locals.auth();
     if (!session?.user) {
         throw error(401, 'Please login to view events');
@@ -14,11 +12,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const user = await getUserByEmail(session?.user?.email!);
 
+    const eventId = params.id;
+
     try {
-        // Get published events that haven't ended yet
-        const publishedEvents = await db.query.events.findMany({
-            where: (events, { and, eq, gte }) => and(
+        // Get event
+        const event = await db.query.events.findFirst({
+            where: (events, {and, eq, gte}) => and(
                 eq(events.status, 'published'),
+                eq(events.id, eventId),
                 gte(events.endDate, new Date())
             ),
             with: {
@@ -26,35 +27,32 @@ export const load: PageServerLoad = async ({ locals }) => {
                     with: {
                         child: true,
                         transaction: true
-                    }
+                    },
+                    where: (rsvps, {eq}) => eq(rsvps.parentId, session.user?.id as string)
                 }
             }
         });
 
-        // Get user's children
-        const userChildren = await db.query.children.findMany({
-            where: (children, { eq }) => eq(children.parentId, session.user?.id as string)
-        });
+        if (event === undefined) {
+            return fail(404, {message: 'Event not found'});
+        }
 
         // Enhance events with registration info
-        const enhancedEvents = publishedEvents.map(event => ({
+        const enhancedEvent = {
             ...event,
             spotsAvailable: event.maxParticipants ? event.maxParticipants - event.rsvps.filter(r =>
-                r.transaction?.status === 'completed'
+                r.status === 'confirmed'
             ).length : null,
             userRegistrations: event.rsvps.filter(r =>
-                r.parentId === user?.id as string
+                r.parentId === session.user?.id as string
             )
-        }));
+        };
 
         return {
-            events: enhancedEvents,
-            children: userChildren
+            event: enhancedEvent,
         };
     } catch (err) {
         console.error('Error loading events:', err);
         throw error(500, 'Failed to load events');
     }
 };
-
-

@@ -1,47 +1,68 @@
 <script lang="ts">
-    import { toast } from "svelte-sonner";
+    import {toast} from "svelte-sonner";
     import * as Tabs from "$lib/components/ui/tabs";
-    import { Checkbox } from "$lib/components/ui/checkbox/index.js";
-    import { Button } from "$lib/components/ui/button/index.js";
-    import { Label } from "$lib/components/ui/label/index.js";
-    import { Input } from "$lib/components/ui/input/index.js";
+    import {Checkbox} from "$lib/components/ui/checkbox/index.js";
+    import {Button} from "$lib/components/ui/button/index.js";
+    import {Label} from "$lib/components/ui/label/index.js";
+    import {Input} from "$lib/components/ui/input/index.js";
     import * as Card from "$lib/components/ui/card/index.js";
-    import { Badge } from "$lib/components/ui/badge";
-    import { Plus, ArrowLeft, ArrowRight } from "lucide-svelte";
-    import { superForm } from "sveltekit-superforms/client";
-    import type { PageData } from "./$types";
-    import { zodClient } from "sveltekit-superforms/adapters";
-    import { type RsvpSchema, rsvpSchema } from "$lib/schema";
+    import {Badge} from "$lib/components/ui/badge";
+    import {Plus, ArrowLeft, ArrowRight} from "lucide-svelte";
+    import {superForm} from "sveltekit-superforms/client";
+    import type {PageData} from "./$types";
+    import {zodClient} from "sveltekit-superforms/adapters";
+    import {type RsvpSchema, rsvpSchema} from "$lib/schema";
     import {writable} from "svelte/store";
+    import SuperDebug, {formFieldProxy} from "sveltekit-superforms";
 
-    let { data }: { data: PageData } = $props();
+    let {data}: { data: PageData } = $props();
     let currentStep = writable(1);
 
-    const { form, errors, enhance, delayed, message } = superForm(data.rsvpForm!, {
+    const f = superForm(data.rsvpForm!, {
         validationMethod: 'auto',
         invalidateAll: 'force',
         dataType: 'json',
         taintedMessage: null,
         validators: zodClient(rsvpSchema),
-        onUpdate({ form }) {
+        onUpdate({form}) {
             if (form.message) {
                 if (!form.valid) {
                     toast.error(form.message);
                 } else if (form.valid) {
                     toast.success(form.message);
-                    if (parseInt(form.data?.payment_amount) > 0) {
+                    if (form.data?.payment_amount > 0) {
                         toast.info('Please complete payment to confirm registration');
                     }
                 }
             }
+        },
+        onResult({result}) {
+            if (result.type === 'success') {
+                const data = result.data
+                // Check for transaction id
+                if (data?.message) {
+                    toast.success(data?.message);
+                }
+            }
+        },
+        onError({result}) {
+            if (result.type === 'error') {
+                toast.error(
+                    result.error.message || 'An error occurred. Please try again later.'
+                );
+            }
         }
     });
+
+    const {form, errors, enhance, delayed, message} = f;
+
+    const {value: paymentAmount} = formFieldProxy(f, 'payment_amount');
 
     function formatPrice(price: number): string {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD'
-        }).format(price / 100);
+            currency: 'TZS'
+        }).format(price);
     }
 
     function handleNext() {
@@ -62,6 +83,8 @@
         } else {
             $form.childrenIds = [...$form.childrenIds, childId];
         }
+        // update paymentAmount
+        $paymentAmount = $form.childrenIds.length * (data.event?.price || 0);
     }
 </script>
 
@@ -103,6 +126,13 @@
         </div>
     </div>
 
+    <!-- Error message -->
+    {#if $message }
+        <div class="p-4 bg-destructive text-white text-center">
+            {$message}
+        </div>
+    {/if}
+
     <form
             method="POST"
             action="?/register"
@@ -116,7 +146,7 @@
         {#if $currentStep === 1}
             <Card.Content class="space-y-6 border rounded">
                 <div>
-                    <h2 class="text-2xl font-semibold">Add the kid you want to RSVP</h2>
+                    <h2 class="text-2xl font-semibold">Add the child you want to RSVP</h2>
                     <p class="font-thin">You can select more than one.</p>
                 </div>
 
@@ -146,7 +176,7 @@
                         variant="outline"
                         class="w-full"
                 >
-                    <Plus class="mr-2" />
+                    <Plus class="mr-2"/>
                     Add child
                 </Button>
 
@@ -186,7 +216,7 @@
                             disabled={$form.childrenIds.length === 0 || !$form.participation_permission || !$form.media_permission }
                     >
                         Next Step
-                        <ArrowRight class="ml-2" />
+                        <ArrowRight class="ml-2"/>
                     </Button>
                 </div>
             </Card.Content>
@@ -203,12 +233,12 @@
                             </div>
                         </div>
 
-                        <Label class="text-muted-foreground">Select a payment method</Label>
+                        <!--                        <Label class="text-muted-foreground">Select a payment method</Label>-->
 
                         <Tabs.Root value="mobile" class="w-full">
-                            <Tabs.List class="grid w-full grid-cols-2">
+                            <Tabs.List class="grid w-full grid-cols-1">
                                 <Tabs.Trigger value="mobile">Mobile</Tabs.Trigger>
-                                <Tabs.Trigger value="bank">Bank</Tabs.Trigger>
+                                <!--                                <Tabs.Trigger value="bank">Bank</Tabs.Trigger>-->
                             </Tabs.List>
                             <Tabs.Content value="mobile">
                                 <Card.Root>
@@ -232,32 +262,32 @@
                                     </Card.Content>
                                 </Card.Root>
                             </Tabs.Content>
-                            <Tabs.Content value="bank">
-                                <Card.Root>
-                                    <Card.Header>
-                                        <Card.Description>
-                                            <p class="font-thin">Pay to our bank account</p>
-                                            <p>Requires you to submit verification</p>
-                                        </Card.Description>
-                                    </Card.Header>
-                                    <Card.Content class="space-y-2">
-                                        <div class=" flex flex-col gap-2">
-                                            <div class="flex gap-4 border p-2 rounded  items-center justify-between">
-                                                <Label>0152305248900</Label>
-                                                <Button
-                                                    onclick={() => {
-                                                        navigator.clipboard.writeText('0152305248900');
-                                                        toast.success('Copied to clipboard');
-                                                    }}
-                                                >
-                                                    copy
-                                                </Button>
-                                            </div>
-                                            <p class="font-bold text-xl">CRDB BANK - Amina Lukanza</p>
-                                        </div>
-                                    </Card.Content>
-                                </Card.Root>
-                            </Tabs.Content>
+                            <!--                            <Tabs.Content value="bank">-->
+                            <!--                                <Card.Root>-->
+                            <!--                                    <Card.Header>-->
+                            <!--                                        <Card.Description>-->
+                            <!--                                            <p class="font-thin">Pay to our bank account</p>-->
+                            <!--                                            <p>Requires you to submit verification</p>-->
+                            <!--                                        </Card.Description>-->
+                            <!--                                    </Card.Header>-->
+                            <!--                                    <Card.Content class="space-y-2">-->
+                            <!--                                        <div class=" flex flex-col gap-2">-->
+                            <!--                                            <div class="flex gap-4 border p-2 rounded  items-center justify-between">-->
+                            <!--                                                <Label>0152305248900</Label>-->
+                            <!--                                                <Button-->
+                            <!--                                                    onclick={() => {-->
+                            <!--                                                        navigator.clipboard.writeText('0152305248900');-->
+                            <!--                                                        toast.success('Copied to clipboard');-->
+                            <!--                                                    }}-->
+                            <!--                                                >-->
+                            <!--                                                    copy-->
+                            <!--                                                </Button>-->
+                            <!--                                            </div>-->
+                            <!--                                            <p class="font-bold text-xl">CRDB BANK - Amina Lukanza</p>-->
+                            <!--                                        </div>-->
+                            <!--                                    </Card.Content>-->
+                            <!--                                </Card.Root>-->
+                            <!--                            </Tabs.Content>-->
                         </Tabs.Root>
                     </div>
                 </Card.Content>
@@ -268,7 +298,7 @@
                             variant="outline"
                             onclick={handleBack}
                     >
-                        <ArrowLeft class="mr-2" />
+                        <ArrowLeft class="mr-2"/>
                         Back
                     </Button>
                     <Button
@@ -281,4 +311,8 @@
             </div>
         {/if}
     </form>
+
+    <SuperDebug data={{formData: $form, errors: $errors, message: $message }}></SuperDebug>
+
+
 </Card.Root>

@@ -184,6 +184,7 @@ export const transactions = pgTable('transactions', {
     userId: text('user_id')
         .notNull()
         .references(() => users.id),
+    reference: text('reference').notNull(),
 
     // Payment details
     paymentMethod: paymentMethodEnum('payment_method'),
@@ -218,6 +219,10 @@ export const transactionsRelations = relations(transactions, ({one, many}) => ({
     user: one(users, {
         fields: [transactions.userId],
         references: [users.id],
+    }),
+    rsvp: one(rsvps, {
+        fields: [transactions.id],
+        references: [rsvps.transactionId],
     }),
 }));
 

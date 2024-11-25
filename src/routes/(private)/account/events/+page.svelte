@@ -40,8 +40,8 @@
     function formatPrice(price: number): string {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD'
-        }).format(price / 100);
+            currency: 'TZS'
+        }).format(price);
     }
 
     function openDialog(event: typeof currentEvent) {
@@ -61,7 +61,7 @@
         {#each events as event}
             <Card.Root>
                 <Card.Header>
-                    <div class="flex justify-between items-start">
+                    <div class="flex flex-col justify-between gap-3 items-start">
                         <Card.Title>{event.name}</Card.Title>
                         <div class="flex gap-2">
                             {#if event.spotsAvailable === 0}
@@ -76,7 +76,6 @@
                             {/if}
                         </div>
                     </div>
-                    <Card.Description>{event.description}</Card.Description>
                 </Card.Header>
 
                 <Card.Content>
@@ -89,10 +88,6 @@
                                 <span>{formatDate(event.endDate)}</span>
                             {/if}
                         </div>
-                        <!--                        <div class="flex items-center gap-2">-->
-                        <!--                            <Clock class="h-4 w-4" />-->
-                        <!--                            <span>{formatTime(event.startDate)} - {formatTime(event.endDate)}</span>-->
-                        <!--                        </div>-->
                         <div class="flex items-center gap-2">
                             <MapPin class="h-4 w-4"/>
                             <span>{event.location}</span>
