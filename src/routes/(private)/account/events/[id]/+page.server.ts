@@ -5,7 +5,7 @@ import {db} from '$lib/server/db';
 import {children, events, rsvps, transactions} from '$lib/server/db/schema';
 import {eq, and, gte} from 'drizzle-orm';
 import {getUserByEmail} from "$lib/server/db/actions";
-import {rsvpSchema} from "$lib/schema";
+import {addChildSchema, rsvpSchema} from "$lib/schema";
 import {message, superValidate} from "sveltekit-superforms";
 import {zod} from "sveltekit-superforms/adapters";
 import {z} from "zod";
@@ -71,10 +71,29 @@ export const load: PageServerLoad = async ({locals, params}) => {
             )
         };
 
+        const dietaryOptions = [
+            'Vegetarian',
+            'Vegan',
+            'Halal',
+            'Kosher',
+            'Gluten-free',
+            'Lactose-free'
+        ];
+
+        const updatedAddChildSchema = addChildSchema.merge(z.object({
+            parentId: z.string().optional().default(user?.id as string)
+        }))
+
+        const addChildForm = await superValidate(
+            zod(updatedAddChildSchema)
+        );
+
         return {
             rsvpForm: form,
             event: enhancedEvent,
-            children: userChildren
+            children: userChildren,
+            addChildForm,
+            dietaryOptions,
         };
     } catch (err) {
         console.error('Error loading events:', err);
@@ -111,6 +130,8 @@ export const actions = {
 
         const eventId = formData.eventId?.toString();
         const childrenIds = formData.childrenIds.map(id => id.toString());
+
+        let transaction: any;
 
         try {
 
@@ -151,7 +172,7 @@ export const actions = {
             if (event.price && event.price > 0) {
                 // Create transaction record
                 const amt = (event.price || 0) * childrenIds.length
-                const transaction = await db.insert(transactions).values({
+                transaction = await db.insert(transactions).values({
                     amount: parseFloat(amt.toFixed(2)).toString(),
                     userId: user?.id as string,
                     status: 'pending',
@@ -177,10 +198,6 @@ export const actions = {
 
                 await Promise.all(rsvpPromises);
 
-                redirect(307, `/account/pay/${transaction.id}`);
-
-                return message(form, 'Registration successful');
-
             } else {
                 // Create RSVPs without transaction
                 const rsvpPromises = childrenIds.map(childId =>
@@ -193,8 +210,6 @@ export const actions = {
                 );
 
                 await Promise.all(rsvpPromises);
-
-                return message(form, 'Registration successful');
             }
         } catch (err) {
             console.error('Error registering for event:', err);
@@ -202,6 +217,9 @@ export const actions = {
                 status: 500
             });
         }
+
+        redirect(307, `/account/pay/${transaction.id}`);
+
     },
 
     cancelRegistration: async ({request, locals}) => {

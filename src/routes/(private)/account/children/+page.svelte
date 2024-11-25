@@ -13,8 +13,13 @@
     import AddChildForm from "../../components/add-child-form.svelte"
     import {ScrollArea} from "$lib/components/ui/scroll-area";
     import * as Avatar from "$lib/components/ui/avatar";
+    import {writable} from "svelte/store";
+    import {invalidateAll} from "$app/navigation";
 
     let {data}: { data: PageData } = $props();
+
+    let isOpen = writable(false);
+
 
 </script>
 
@@ -28,7 +33,7 @@
         <h2 class="text-2xl font-bold mt-8 mb-4">Children</h2>
 
         <div class="space-y-4">
-            <Dialog.Root>
+            <Dialog.Root open={$isOpen} onOpenChange={x => $isOpen = x}>
                 <Dialog.Trigger class={buttonVariants({ variant: "outline" })}>
                     <Plus/>
                     Add Child
@@ -47,6 +52,10 @@
                         {#if (data.session && data.user)}
                             <AddChildForm addChildForm={data.addChildForm} dietaryOptions={data.dietaryOptions}
                                           session={data.session} user={data.user}
+                                          onSuccess={async () => {
+                                              await invalidateAll();
+                                              $isOpen = false;
+                                          }}
                             />
                         {/if}
                     </ScrollArea>
@@ -55,7 +64,7 @@
         </div>
     </div>
 
-    <div class="grid grid-flow-col">
+    <div class="flex flex-col gap-2">
 
         {#each data.children as child}
             <div class="bg-white rounded-lg shadow-md p-4">

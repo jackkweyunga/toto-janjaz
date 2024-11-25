@@ -125,7 +125,7 @@
         </div>
 
         <div>
-            <Label class="block text-sm font-medium text-gray-700">Phone Number</Label>
+            <Label class="block text-sm font-medium text-gray-700">Phone Number to pay with</Label>
             <Input
                     type="tel"
                     bind:value={phone}

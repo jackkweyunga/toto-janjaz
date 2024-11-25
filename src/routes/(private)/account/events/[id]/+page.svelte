@@ -14,9 +14,16 @@
     import {type RsvpSchema, rsvpSchema} from "$lib/schema";
     import {writable} from "svelte/store";
     import SuperDebug, {formFieldProxy} from "sveltekit-superforms";
+    import {buttonVariants} from "$lib/components/ui/button";
+    import AddChildForm from "../../../components/add-child-form.svelte";
+    import {ScrollArea} from "$lib/components/ui/scroll-area";
+    import {Separator} from "$lib/components/ui/separator";
+    import * as Dialog from "$lib/components/ui/dialog";
+    import {invalidateAll} from "$app/navigation";
 
     let {data}: { data: PageData } = $props();
     let currentStep = writable(1);
+    let isOpen = writable(false);
 
     const f = superForm(data.rsvpForm!, {
         validationMethod: 'auto',
@@ -133,6 +140,35 @@
         </div>
     {/if}
 
+    <Dialog.Root open={$isOpen} onOpenChange={(x) => $isOpen = x}>
+        <Dialog.Trigger type="button" class={"w-full" + buttonVariants({ variant: "default" })}>
+            <Plus/>
+            Add Child
+        </Dialog.Trigger>
+        <Dialog.Content class="sm:max-w-[512px] h-[90vh] px-0">
+            <div class="px-4">
+                <Dialog.Header>
+                    <Dialog.Title>Add Child</Dialog.Title>
+                    <Dialog.Description>
+                        Add a child to your account
+                    </Dialog.Description>
+                </Dialog.Header>
+            </div>
+            <Separator/>
+            <ScrollArea class="h-full">
+                {#if (data.session && data.user && data.addChildForm && data.dietaryOptions)}
+                    <AddChildForm addChildForm={data.addChildForm} dietaryOptions={data.dietaryOptions}
+                                  session={data.session} user={data.user}
+                                  onSuccess={async () => {
+                                                  await invalidateAll();
+                                                  $isOpen = false
+                                             }}
+                    />
+                {/if}
+            </ScrollArea>
+        </Dialog.Content>
+    </Dialog.Root>
+
     <form
             method="POST"
             action="?/register"
@@ -170,15 +206,6 @@
                         {$errors.childrenIds._errors?.map(error => error).join(', ')}
                     </p>
                 {/if}
-
-                <Button
-                        type="button"
-                        variant="outline"
-                        class="w-full"
-                >
-                    <Plus class="mr-2"/>
-                    Add child
-                </Button>
 
                 <div class="flex items-start space-x-2">
                     <Checkbox
@@ -226,6 +253,19 @@
                     <div class="w-full flex flex-col space-y-4">
                         <div class="text-2xl font-semibold">Payment</div>
                         <div class="flex flex-col gap-2">
+                            <Label class="text-muted-foreground">For</Label>
+                            <div class="text-xl">
+                                <span>{$form.childrenIds.length}</span>
+                                <span>
+                                    {#if $form.childrenIds.length > 1}
+                                        children
+                                    {:else}
+                                        child
+                                    {/if}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
                             <Label class="text-muted-foreground">Amount</Label>
                             <div class="text-xl">
                                 <span>{$form.payment_currency}</span>
@@ -233,62 +273,6 @@
                             </div>
                         </div>
 
-                        <!--                        <Label class="text-muted-foreground">Select a payment method</Label>-->
-
-                        <Tabs.Root value="mobile" class="w-full">
-                            <Tabs.List class="grid w-full grid-cols-1">
-                                <Tabs.Trigger value="mobile">Mobile</Tabs.Trigger>
-                                <!--                                <Tabs.Trigger value="bank">Bank</Tabs.Trigger>-->
-                            </Tabs.List>
-                            <Tabs.Content value="mobile">
-                                <Card.Root>
-                                    <Card.Header>
-                                        <Card.Description>
-                                            <p class="font-thin">Pay instantly with mobile</p>
-                                            <p>Enter a phone number used for payment</p>
-                                        </Card.Description>
-                                    </Card.Header>
-                                    <Card.Content class="space-y-2">
-                                        <div class=" flex flex-col gap-2">
-                                            <Input
-                                                    name="phone"
-                                                    bind:value={$form.phone}
-                                                    placeholder="0765142714"
-                                            />
-                                            {#if $errors.phone}
-                                                <p class="text-destructive text-sm">{$errors.phone}</p>
-                                            {/if}
-                                        </div>
-                                    </Card.Content>
-                                </Card.Root>
-                            </Tabs.Content>
-                            <!--                            <Tabs.Content value="bank">-->
-                            <!--                                <Card.Root>-->
-                            <!--                                    <Card.Header>-->
-                            <!--                                        <Card.Description>-->
-                            <!--                                            <p class="font-thin">Pay to our bank account</p>-->
-                            <!--                                            <p>Requires you to submit verification</p>-->
-                            <!--                                        </Card.Description>-->
-                            <!--                                    </Card.Header>-->
-                            <!--                                    <Card.Content class="space-y-2">-->
-                            <!--                                        <div class=" flex flex-col gap-2">-->
-                            <!--                                            <div class="flex gap-4 border p-2 rounded  items-center justify-between">-->
-                            <!--                                                <Label>0152305248900</Label>-->
-                            <!--                                                <Button-->
-                            <!--                                                    onclick={() => {-->
-                            <!--                                                        navigator.clipboard.writeText('0152305248900');-->
-                            <!--                                                        toast.success('Copied to clipboard');-->
-                            <!--                                                    }}-->
-                            <!--                                                >-->
-                            <!--                                                    copy-->
-                            <!--                                                </Button>-->
-                            <!--                                            </div>-->
-                            <!--                                            <p class="font-bold text-xl">CRDB BANK - Amina Lukanza</p>-->
-                            <!--                                        </div>-->
-                            <!--                                    </Card.Content>-->
-                            <!--                                </Card.Root>-->
-                            <!--                            </Tabs.Content>-->
-                        </Tabs.Root>
                     </div>
                 </Card.Content>
 
@@ -312,7 +296,7 @@
         {/if}
     </form>
 
-    <SuperDebug data={{formData: $form, errors: $errors, message: $message }}></SuperDebug>
+    <!--    <SuperDebug data={{formData: $form, errors: $errors, message: $message }}></SuperDebug>-->
 
 
 </Card.Root>

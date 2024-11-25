@@ -51,6 +51,7 @@ export const load: PageServerLoad = async ({ locals }) => {
             events: enhancedEvents,
             children: userChildren
         };
+
     } catch (err) {
         console.error('Error loading events:', err);
         throw error(500, 'Failed to load events');
