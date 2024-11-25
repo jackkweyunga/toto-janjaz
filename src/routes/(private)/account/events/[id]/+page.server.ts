@@ -37,7 +37,7 @@ export const load: PageServerLoad = async ({locals, params}) => {
             where: (events, {and, eq, gte}) => and(
                 eq(events.status, 'published'),
                 eq(events.id, eventId),
-                gte(events.endDate, new Date())
+                // gte(events.endDate, new Date())
             ),
             with: {
                 rsvps: {
@@ -45,7 +45,7 @@ export const load: PageServerLoad = async ({locals, params}) => {
                         child: true,
                         transaction: true
                     },
-                    where: (rsvps, {eq}) => eq(rsvps.parentId, session.user?.id as string)
+                    where: (rsvps, {eq}) => eq(rsvps.parentId, user?.id as string)
                 }
             }
         });

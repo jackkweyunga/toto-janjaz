@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({locals}) => {
         const publishedEvents = await db.query.events.findMany({
             where: (events, {and, eq, gte}) => and(
                 eq(events.status, 'published'),
-                gte(events.endDate, new Date())
+                // gte(events.endDate, new Date())
             ),
             with: {
                 rsvps: {
@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({locals}) => {
 
         // Get user's children
         const userChildren = await db.query.children.findMany({
-            where: (children, {eq}) => eq(children.parentId, session.user?.id as string)
+            where: (children, {eq}) => eq(children.parentId, user?.id as string)
         });
 
         // Enhance events with registration info

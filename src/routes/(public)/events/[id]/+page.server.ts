@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({locals, params}) => {
             where: (events, {and, eq, gte}) => and(
                 eq(events.status, 'published'),
                 eq(events.id, eventId),
-                gte(events.endDate, new Date())
+                // gte(events.endDate, new Date())
             ),
         });
 

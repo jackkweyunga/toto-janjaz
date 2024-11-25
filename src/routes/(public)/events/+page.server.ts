@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals }) => {
         const publishedEvents = await db.query.events.findMany({
             where: (events, { and, eq, gte }) => and(
                 eq(events.status, 'published'),
-                gte(events.endDate, new Date())
+                // gte(events.endDate, new Date())
             ),
         });
 

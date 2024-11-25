@@ -71,11 +71,6 @@
                             </li>
                         {/if}
                     </ul>
-                    <Sheet.Footer>
-                        <Sheet.Close>
-                            <Button type="submit">Save changes</Button>
-                        </Sheet.Close>
-                    </Sheet.Footer>
                 </Sheet.Content>
             </Sheet.Root>
         </div>

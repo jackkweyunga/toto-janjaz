@@ -51,7 +51,7 @@
                     Bring your kids, to learn more about how their country got independence and the man behind it, in a
                     fun and intuitive way.
                 </p>
-                <a href="/events/t3u7ddjtl2pycg09vu8wzjam" class="flex items-center space-x-2">
+                <a href="/events/i0p5y59l9m42qjo707huqx52" class="flex items-center space-x-2">
                     <Button size="lg">
                         RSVP Now
                     </Button>
