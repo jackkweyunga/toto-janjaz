@@ -25,7 +25,7 @@ const config = {
 				background: "hsl(var(--background) / <alpha-value>)",
 				foreground: "hsl(var(--foreground) / <alpha-value>)",
 				primary: {
-					DEFAULT: "hsl(var(--primary) / <alpha-value>)",
+					DEFAULT: "#8354A4",
 					foreground: "hsl(var(--primary-foreground) / <alpha-value>)"
 				},
 				secondary: {
@@ -50,7 +50,8 @@ const config = {
 				},
 				card: {
 					DEFAULT: "hsl(var(--card) / <alpha-value>)",
-					foreground: "hsl(var(--card-foreground) / <alpha-value>)"
+					foreground: "hsl(var(--card-foreground) / <alpha-value>)",
+					eventBG: "#C5FFE7",
 				},
 				sidebar: {
 					DEFAULT: "hsl(var(--sidebar-background))",
@@ -70,7 +71,7 @@ const config = {
 				sm: "calc(var(--radius) - 4px)"
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans]
+				sans: [...fontFamily.sans, 'Poppins', 'sans-serif'],
 			},
 			keyframes: {
 				"accordion-down": {

@@ -9,6 +9,7 @@
     import seede from '$lib/assets/seede.png';
     import zaidi from '$lib/assets/zaidi.png';
     import pea from '$lib/assets/pea.png';
+    import KidVR from '$lib/assets/Kid_in_VR.png';
 
     import {Label} from "$lib/components/ui/label";
 
@@ -40,17 +41,17 @@
 <div class="flex flex-col min-h-screen">
 
     <main class="flex-grow">
-        <section class="border my-16 md:my-24 overflow-hidden container flex justify-start relative rounded-2xl">
+        <section class="border my-16 md:my-24 overflow-hidden container flex justify-start relative rounded-2xl bg-card-eventBG">
             <div class="   py-20 text-left max-w-2xl">
                 <Label class="uppercase text-muted-foreground">Social event</Label>
                 <h1 class="text-5xl md:text-5xl font-bold mb-4">
-                    The J.K Nyerere Quest On Independence Day
+                    The Nyerere Quest On Independence Day
                 </h1>
                 <p class="text-xl mb-8">
                     Bring your kids, to learn more about how their country got independence and the man behind it, in a
                     fun and intuitive way.
                 </p>
-                <Button size="lg" class="text-white font-bold px-6 text-lg">
+                <Button size="lg" class="text-white font-bold px-6 text-lg bg-primary">
                     Register Now
                     <ChevronRight/>
                 </Button>
@@ -59,25 +60,36 @@
         </section>
 
         <section class="py-16 space-y-12">
-            <div class="font-semibold relative after:rounded-md after:absolute after:h-full py-[20px] flex items-center justify-end after:w-[20px] container w-full text-5xl after:bg-foreground text-foreground">
-                <span class="px-12">Earning while Learning at the Nyerere Quest!</span>
+            <div class="font-semibold relative after:rounded-md after:absolute after:h-full py-[20px] flex items-center justify-start after:w-[20px] container w-full text-5xl after:bg-primary">
+                <span class="px-12 text-primary"> A Glimpse Into the Adventure!</span>
             </div>
             <div class="container grid grid-cols-1 md:grid-cols-2 items-center">
                 <div class="text-3xl text-justify">
-                    The “Janjanomics” system is an interactive currency-based reward system designed to enhance
-                    engagement, teamwork, and problem-solving skills within the Nyerere Quest. In this system,
-                    participants earn points in the form of Janja (plural Janjaz), a custom currency they accumulate
-                    throughout the quest.
+                    kids will use virtual reality to travel back in time and step into the world of Tanzania’s rich history.
                 </div>
-                <div class="relative h-[400px] w-full flex justify-center">
-                    <img class="h-full absolute object-contain" alt="The project logo" src={money}/>
+                <div class="relative h-[400px] w-full flex justify-end">
+                    <img class="h-full absolute object-contain" alt="The project logo" src={KidVR}/>
                 </div>
             </div>
         </section>
 
         <section class="py-16 space-y-12">
-            <div class="font-semibold relative after:rounded-md after:absolute after:h-full py-[20px] flex items-center justify-start after:w-[20px] container w-full text-5xl after:bg-foreground text-foreground">
-                <span class="px-12">Partners</span>
+            <div class="font-semibold relative after:rounded-md after:absolute after:h-full py-[20px] flex items-center justify-end after:w-[20px] container w-full text-5xl after:bg-primary">
+                <span class="px-12 text-primary font-sans">Earning while Learning at the Nyerere Quest!</span>
+            </div>
+            <div class="container grid grid-cols-1 md:grid-cols-2 items-center">
+                <div class="relative h-[400px] w-full flex justify-start">
+                    <img class="h-full absolute object-contain" alt="The project logo" src={money}/>
+                </div>
+                <div class="text-3xl text-justify">
+                    As participants complete challenges, they’ll earn points in the form of Janja Coins, awarded based on their performance in room challenges and trivia games.
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 space-y-12">
+            <div class="font-semibold relative after:rounded-md after:absolute after:h-full py-[20px] flex items-center justify-start after:w-[20px] container w-full text-5xl after:bg-primary text-foreground">
+                <span class="px-12 text-primary">Partners</span>
             </div>
             <div class="container grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
                 {#each partners as partner}
