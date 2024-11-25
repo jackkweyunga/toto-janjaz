@@ -58,7 +58,7 @@
                     <ChevronRight class="h-8 w-8 text-primary"/>
                 </a>
             </div>
-            <img class="h-full w-full md:absolute bottom-0 right-0" alt="The project logo" src={nyerere}/>
+            <img class="h-full w-full md:w-auto md:absolute bottom-0 right-0" alt="The project logo" src={nyerere}/>
         </section>
 
         <section class="py-16 space-y-12">
