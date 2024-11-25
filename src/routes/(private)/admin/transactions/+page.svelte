@@ -62,9 +62,14 @@
                                     </Badge>
                                 </td>
                                 <td class="p-2">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col gap-2">
                                         <h3>{tx?.rsvp?.child?.fullName || 'N/A'}</h3>
                                         <Label class="text-muted-foreground">{tx?.rsvp?.child?.parent?.name}</Label>
+                                        <a class="text-primary cursor-pointer font-bold" href={`tel:${tx?.rsvp?.child?.emergencyContact}`}>
+                                            <Label>
+                                                {tx?.rsvp?.child?.emergencyContact}
+                                            </Label>
+                                        </a>
                                     </div>
                                 </td>
                                 <td class="p-2">{tx?.rsvp?.event?.name || 'N/A'}</td>

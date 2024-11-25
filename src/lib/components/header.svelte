@@ -6,6 +6,9 @@
     import {Input} from "$lib/components/ui/input/index.js";
     import {Label} from "$lib/components/ui/label/index.js";
     import {MenuIcon} from "lucide-svelte";
+    import {writable} from "svelte/store";
+
+    let isOpen = writable(false);
 
 </script>
 
@@ -39,7 +42,7 @@
 
         <div class="flex md:hidden">
 
-            <Sheet.Root>
+            <Sheet.Root open={$isOpen} onOpenChange={x => $isOpen = x}>
                 <Sheet.Trigger>
                     <MenuIcon class="h-8 w-8 text-gray-600 mr-4"/>
                 </Sheet.Trigger>
@@ -51,19 +54,19 @@
                         </Sheet.Description>
                     </Sheet.Header>
                     <ul class="flex flex-col space-y-6 items-center">
-                        <li><a href="/" class="text-gray-600 hover:text-purple-600">Home</a></li>
-                        <li><a href="/about" class="text-gray-600 hover:text-purple-600">About</a></li>
-                        <li><a href="/events" class="text-gray-600 hover:text-purple-600">Events</a></li>
-                        <li><a href="/swagz" class="text-gray-600 hover:text-purple-600">Swagz</a></li>
+                        <li><a href="/" onclick={() => $isOpen = false} class="text-gray-600 hover:text-purple-600">Home</a></li>
+                        <li><a href="/about" onclick={() => $isOpen = false} class="text-gray-600 hover:text-purple-600">About</a></li>
+                        <li><a href="/events" onclick={() => $isOpen = false} class="text-gray-600 hover:text-purple-600">Events</a></li>
+                        <li><a href="/swagz" onclick={() => $isOpen = false} class="text-gray-600 hover:text-purple-600">Swagz</a></li>
                         {#if $page.data.session }
                             <li>
-                                <a href="/account" class="text-gray-600 hover:text-purple-600">
+                                <a href="/account" onclick={() => $isOpen = false} class="text-gray-600 hover:text-purple-600">
                                     Account
                                 </a>
                             </li>
                         {:else}
                             <li>
-                                <a href="/login">
+                                <a href="/login" onclick={() => $isOpen = false}>
                                     <Button>
                                         Sign In
                                     </Button>

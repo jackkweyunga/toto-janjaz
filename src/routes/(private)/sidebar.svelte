@@ -9,7 +9,7 @@
     import ChevronRight from "lucide-svelte/icons/chevron-right";
     import Settings2 from "lucide-svelte/icons/settings-2";
 
-    const {user}: { user: typeof users.$inferSelect } = $props()
+    const {user}: { user: typeof users.$inferSelect} = $props()
 
     type Navigation = {
         title: string;
@@ -71,14 +71,13 @@
     }
 
     const currentPath = $derived($page.url.pathname);
-
 </script>
 
 <Sidebar.Root variant="sidebar" collapsible="icon">
     <Sidebar.Header>
         <Sidebar.Menu>
             <Sidebar.MenuItem>
-                <Sidebar.MenuButton size="lg">
+                <Sidebar.MenuButton size="lg" >
                     {#snippet child({props})}
                         <a href="##" {...props}>
                             <div
@@ -110,8 +109,12 @@
                             {#snippet child({props})}
                                 <Sidebar.MenuItem {...props}>
                                     <a href={mainItem.url} {...props}>
-
-                                        <Sidebar.MenuButton {...props}>
+                                        <Sidebar.MenuButton {...props}
+                                            onclick={() => {
+                                                console.log('clicked')
+                                                callback()
+                                            }}
+                                        >
 
                                             {#snippet tooltipContent()}
                                                 {mainItem.title}
