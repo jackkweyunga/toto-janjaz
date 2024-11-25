@@ -1,10 +1,16 @@
 <script lang="ts">
     import { Button } from "$lib/components/ui/button";
     import type {PageData} from './$types';
+    import {onMount} from 'svelte';
+    import {invalidateAll} from "$app/navigation";
 
     const {data}: { data: PageData } = $props();
 
     const {event} = data;
+
+    onMount(() => {
+        invalidateAll();
+    });
 
 </script>
 

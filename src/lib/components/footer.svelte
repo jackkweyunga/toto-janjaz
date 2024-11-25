@@ -6,7 +6,7 @@
 
 <footer class="bg-[#8354A4] text-white">
     <div class="container px-4 py-12 mx-auto">
-        <div class="grid gap-8 lg:grid-cols-4">
+        <div class="grid gap-8 lg:grid-cols-4 justify-center md:justify-start">
             <!-- Logo and Social Section -->
             <div class="space-y-4">
                 <img
