@@ -18,7 +18,7 @@
             {#if $page.data.session }
                 <li>
                     <a href="/account" class="text-gray-600 hover:text-purple-600">
-                        Account
+                       Go to Account
                     </a>
                 </li>
             {:else}
