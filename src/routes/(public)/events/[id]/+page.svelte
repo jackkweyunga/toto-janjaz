@@ -34,7 +34,7 @@
         <div class="text-center">
             <a href="/account/events/{event?.id}" >
                 <Button size="lg">
-                    RSVP Now
+                    Register Now
                 </Button>
             </a>
         </div>
