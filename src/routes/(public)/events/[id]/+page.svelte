@@ -27,9 +27,9 @@
             </h1>
         </div>
 
-        <div class="prose prose-lg">
+        <article class="flex flex-col prose prose-lg">
             {@html event?.description}
-        </div>
+        </article>
 
         <div class="text-center">
             <a href="/account/events/{event?.id}" >
@@ -46,4 +46,23 @@
     :global(.prose) {
         max-width: none;
     }
+
+     :global([data-youtube-video]) {
+         position: relative;
+         width: 100%;
+         padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+         overflow: hidden;
+     }
+
+    :global([data-youtube-video] iframe) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
 </style>
