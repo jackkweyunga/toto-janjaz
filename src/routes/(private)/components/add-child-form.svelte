@@ -17,19 +17,34 @@
     import {Separator} from "$lib/components/ui/separator";
     import type {Session} from "@auth/sveltekit";
     import type {users} from "$lib/server/db/schema";
+    import {toast} from "svelte-sonner";
 
-    let {addChildForm, dietaryOptions, session, user}: {
+    let {addChildForm, dietaryOptions, session, user, onSuccess}: {
         addChildForm: SuperValidated<Infer<AddChildSchema>>,
         dietaryOptions: string[],
         session: Session,
-        user: typeof users.$inferSelect
+        user: typeof users.$inferSelect,
+        onSuccess?: (response: any) => void,
     } = $props()
 
     const form = superForm(addChildForm, {
+        validationMethod: 'auto',
+        invalidateAll: 'force',
+        dataType: 'json',
+        taintedMessage: null,
         validators: zodClient(addChildSchema),
+        onResult: async ({result, formElement}) => {
+            if (result.type === "success") {
+                toast.success(result.data?.form?.message || "success")
+                onSuccess?.(result.data)
+            }
+        },
+        onError: async ({result}) => {
+            toast.error(result.error.message)
+        }
     });
 
-    const {form: formData, enhance} = form;
+    const {form: formData, enhance, submitting} = form;
 
     const showMedicalConditions = $derived($formData.allergies === 'yes');
 
@@ -244,12 +259,20 @@
         </div>
         <Separator/>
         <div class="p-4">
-            <Button type="submit" class="w-full">Save Child</Button>
+            <Button
+                    disabled={$submitting}
+                    type="submit" class="w-full">
+                {#if $submitting}
+                    Submitting...
+                {:else}
+                    Add Child
+                {/if}
+            </Button>
         </div>
 
     </form>
 
-    <SuperDebug data={$formData}></SuperDebug>
+<!--    <SuperDebug data={$formData}></SuperDebug>-->
 
 </Card>
 

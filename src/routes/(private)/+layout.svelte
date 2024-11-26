@@ -14,7 +14,7 @@
 <Sidebar.Provider>
 
     {#if (data?.user)}
-        <AppSidebar user={data?.user}/>
+        <AppSidebar user={data?.user} />
     {/if}
 
     <Sidebar.Inset>

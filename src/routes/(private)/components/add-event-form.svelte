@@ -68,6 +68,8 @@
                 toast.success(result.data?.form?.message || "success")
             }
 
+            await invalidateAll()
+
         },
         onError: async ({result}) => {
             toast.error(result.error.message)
@@ -177,6 +179,17 @@
                 </Form.Field>
             </div>
 
+            <Form.Field {form} name="price">
+                <Form.Control>
+                    {#snippet children({props})}
+                        <Form.Label>Price</Form.Label>
+                        <Input type="number" {...props} bind:value={$formData.price}/>
+                    {/snippet}
+                </Form.Control>
+                <Form.Description>Event price</Form.Description>
+                <Form.FieldErrors/>
+            </Form.Field>
+
             <div class="flex flex-col space-y-2">
                 <Label>Date range</Label>
                 <Popover.Root>
@@ -270,7 +283,7 @@
 
     </form>
 
-    <SuperDebug data={{formData: $formData, dateRangeValue}}></SuperDebug>
+<!--    <SuperDebug data={{formData: $formData, dateRangeValue}}></SuperDebug>-->
 
 </Card>
 

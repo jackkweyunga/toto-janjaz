@@ -60,6 +60,7 @@ export const addEventSchema = z.object({
     createdBy: z.string({
         required_error: "Created by is required"
     }),
+    price: z.number().nullable(),
     startDate: z.date({
         required_error: "Start date is required"
     }).refine(x => x > new Date(), "Start date must be in the future"),
@@ -75,15 +76,12 @@ export type AddEventSchema = typeof addEventSchema
 export const rsvpSchema = z.object({
     eventId: z.string().min(1, "Event ID is required"),
     childrenIds: z.array(z.string()).min(1, "Please select at least one child"),
-    phone: z.string()
-        .min(10, "Phone number must be at least 10 digits")
-        .regex(/^\d+$/, "Phone number must contain only digits"),
     participation_permission: z.boolean()
         .refine(val => val, "You must agree to the participation permission"),
     media_permission: z.boolean()
         .refine(val => val, "You must agree to the media permission"),
     payment_currency: z.enum(["TZS", "USD"]).default("TZS"),
-    payment_amount: z.string().min(1, "Payment amount is required"),
+    payment_amount: z.number().default(0),
     payment_method: z.enum(["mobile", "bank"]).default("mobile"),
 });
 

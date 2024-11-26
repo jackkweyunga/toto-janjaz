@@ -1,6 +1,6 @@
 <script lang="ts">
     import {page} from '$app/stores';
-    import {Home, Calendar, FileText, Headphones, LogOut} from 'lucide-svelte';
+    import {Home, Calendar, FileText, Headphones, LogOut, Users2} from 'lucide-svelte';
     import NavUser from './nav-user.svelte';
     import logo from "$lib/assets/logo.png";
     import type {users} from "$lib/server/db/schema";
@@ -9,7 +9,7 @@
     import ChevronRight from "lucide-svelte/icons/chevron-right";
     import Settings2 from "lucide-svelte/icons/settings-2";
 
-    const {user}: { user: typeof users.$inferSelect } = $props()
+    const {user}: { user: typeof users.$inferSelect} = $props()
 
     type Navigation = {
         title: string;
@@ -27,6 +27,7 @@
     const navigation: Navigation = [
         {title: 'Home', isActive: true, url: '/account', icon: Home},
         {title: 'Events', isActive: true, url: '/account/events', icon: Calendar},
+        {title: 'Children', isActive: true, url: '/account/children', icon: Users2},
         {title: 'Support', isActive: true, url: '/support', icon: Headphones}
     ];
 
@@ -42,10 +43,21 @@
                     url: "/admin/events",
                 },
                 {
-                    title: 'Transactions',
-                    url: '/account/transactions'
+                    title: "RSVPs",
+                    url: "/admin/rsvps",
                 },
-
+                {
+                    title: 'Transactions',
+                    url: '/admin/transactions'
+                },
+                {
+                    title: 'Users',
+                    url: '/admin/users'
+                },
+                {
+                    title: 'Test Payment',
+                    url: '/admin/test-payment'
+                }
             ],
         }
     ]
@@ -59,14 +71,13 @@
     }
 
     const currentPath = $derived($page.url.pathname);
-
 </script>
 
 <Sidebar.Root variant="sidebar" collapsible="icon">
     <Sidebar.Header>
         <Sidebar.Menu>
             <Sidebar.MenuItem>
-                <Sidebar.MenuButton size="lg">
+                <Sidebar.MenuButton size="lg" >
                     {#snippet child({props})}
                         <a href="##" {...props}>
                             <div
@@ -98,8 +109,12 @@
                             {#snippet child({props})}
                                 <Sidebar.MenuItem {...props}>
                                     <a href={mainItem.url} {...props}>
-
-                                        <Sidebar.MenuButton {...props}>
+                                        <Sidebar.MenuButton {...props}
+                                            onclick={() => {
+                                                console.log('clicked')
+                                                callback()
+                                            }}
+                                        >
 
                                             {#snippet tooltipContent()}
                                                 {mainItem.title}
@@ -117,52 +132,55 @@
                     {/each}
                 </Sidebar.Menu>
             </Sidebar.Group>
-            <Sidebar.Group>
-                <Sidebar.GroupLabel>Administration</Sidebar.GroupLabel>
-                <Sidebar.Menu>
-                    {#each adminNavigation as mainItem (mainItem.title)}
-                        <Collapsible.Root open={mainItem.isActive} class="group/collapsible">
-                            {#snippet child({props})}
-                                <Sidebar.MenuItem {...props}>
-                                    <Collapsible.Trigger>
-                                        {#snippet child({props})}
-                                            <Sidebar.MenuButton {...props}>
-                                                {#snippet tooltipContent()}
-                                                    {mainItem.title}
-                                                {/snippet}
-                                                {#if mainItem.icon}
-                                                    <mainItem.icon/>
-                                                {/if}
-                                                <span>{mainItem.title}</span>
-                                                <ChevronRight
-                                                        class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
-                                                />
-                                            </Sidebar.MenuButton>
-                                        {/snippet}
-                                    </Collapsible.Trigger>
-                                    <Collapsible.Content>
-                                        {#if mainItem.items}
-                                            <Sidebar.MenuSub>
-                                                {#each mainItem.items as subItem (subItem.title)}
-                                                    <Sidebar.MenuSubItem>
-                                                        <Sidebar.MenuSubButton>
-                                                            {#snippet child({props})}
-                                                                <a href={subItem.url} {...props}>
-                                                                    <span>{subItem.title}</span>
-                                                                </a>
-                                                            {/snippet}
-                                                        </Sidebar.MenuSubButton>
-                                                    </Sidebar.MenuSubItem>
-                                                {/each}
-                                            </Sidebar.MenuSub>
-                                        {/if}
-                                    </Collapsible.Content>
-                                </Sidebar.MenuItem>
-                            {/snippet}
-                        </Collapsible.Root>
-                    {/each}
-                </Sidebar.Menu>
-            </Sidebar.Group>
+
+            {#if user?.is_admin}
+                <Sidebar.Group>
+                    <Sidebar.GroupLabel>Administration</Sidebar.GroupLabel>
+                    <Sidebar.Menu>
+                        {#each adminNavigation as mainItem (mainItem.title)}
+                            <Collapsible.Root open={mainItem.isActive} class="group/collapsible">
+                                {#snippet child({props})}
+                                    <Sidebar.MenuItem {...props}>
+                                        <Collapsible.Trigger>
+                                            {#snippet child({props})}
+                                                <Sidebar.MenuButton {...props}>
+                                                    {#snippet tooltipContent()}
+                                                        {mainItem.title}
+                                                    {/snippet}
+                                                    {#if mainItem.icon}
+                                                        <mainItem.icon/>
+                                                    {/if}
+                                                    <span>{mainItem.title}</span>
+                                                    <ChevronRight
+                                                            class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                                                    />
+                                                </Sidebar.MenuButton>
+                                            {/snippet}
+                                        </Collapsible.Trigger>
+                                        <Collapsible.Content>
+                                            {#if mainItem.items}
+                                                <Sidebar.MenuSub>
+                                                    {#each mainItem.items as subItem (subItem.title)}
+                                                        <Sidebar.MenuSubItem>
+                                                            <Sidebar.MenuSubButton>
+                                                                {#snippet child({props})}
+                                                                    <a href={subItem.url} {...props}>
+                                                                        <span>{subItem.title}</span>
+                                                                    </a>
+                                                                {/snippet}
+                                                            </Sidebar.MenuSubButton>
+                                                        </Sidebar.MenuSubItem>
+                                                    {/each}
+                                                </Sidebar.MenuSub>
+                                            {/if}
+                                        </Collapsible.Content>
+                                    </Sidebar.MenuItem>
+                                {/snippet}
+                            </Collapsible.Root>
+                        {/each}
+                    </Sidebar.Menu>
+                </Sidebar.Group>
+            {/if}
         </Sidebar.Menu>
     </Sidebar.Content>
 
