@@ -12,6 +12,7 @@
 </script>
 
 <Sidebar.Provider>
+
     {#if (data?.user)}
         <AppSidebar user={data?.user} />
     {/if}

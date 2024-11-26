@@ -4,6 +4,7 @@
     import {toast} from "svelte-sonner";
     import {Card, CardContent} from "$lib/components/ui/card/index.js";
     import {Button} from "$lib/components/ui/button";
+    import {onMount} from "svelte"
 
     const {data}: { data: PageData } = $props();
 
@@ -17,6 +18,26 @@
     const handlePaymentError = (error: any) => {
         console.error('Payment failed:', error);
     };
+
+    onMount(() => {
+        // Check payment status every 5 seconds
+        const interval = setInterval(() => {
+            fetch(`/api/payments/${transaction?.id}/status`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'COMPLETED') {
+                        clearInterval(interval);
+                        handlePaymentSuccess(data);
+                    } else if (data.status === 'FAILED') {
+                        clearInterval(interval);
+                        handlePaymentError(data);
+                    }
+                })
+                .catch(err => {
+                    console.error('Status check failed:', err);
+                });
+        }, 5000);
+    })
 
 </script>
 
