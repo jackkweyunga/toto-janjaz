@@ -5,6 +5,7 @@ import { env } from "$env/dynamic/private";
 import { db } from "../db";
 import { transactions } from "../db/schema";
 import { eq } from "drizzle-orm";
+import https from 'https';
 
 // Validation schemas
 export const paymentSchema = z.object({
@@ -89,6 +90,7 @@ export class ServerPaymentService {
                     secret_key: this.config.secretKey,
                     account_id: this.config.accountId,
                 }),
+
             });
 
             if (!response.ok) {
@@ -182,9 +184,11 @@ export class ServerPaymentService {
             throw error(404, { message: 'Transaction not found' });
         }
 
-        if (transaction.userId !== userId) {
-            throw error(403, { message: 'Unauthorized' });
-        }
+        // Skipped this to allow the admins to check status
+        // TODO: pass this as an argument
+        // if (transaction.userId !== userId) {
+        //     throw error(403, { message: 'Unauthorized' });
+        // }
 
         try {
             const response: OrderStatusResponse = await this.makeRequest('/order-status', {

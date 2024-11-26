@@ -5,6 +5,7 @@
     import {Card, CardContent} from "$lib/components/ui/card/index.js";
     import {Button} from "$lib/components/ui/button";
     import {onMount} from "svelte"
+    import {writable} from "svelte/store";
 
     const {data}: { data: PageData } = $props();
 
@@ -19,31 +20,33 @@
         console.error('Payment failed:', error);
     };
 
+    let checkingStatus = writable(true);
+
     onMount(() => {
-        // Check payment status every 5 seconds
-        const interval = setInterval(() => {
-            fetch(`/api/payments/${transaction?.id}/status`)
+
+        (async () => {
+            await fetch(`/api/payments/${transaction?.id}/status`)
                 .then(response => response.json())
                 .then(data => {
+                    $checkingStatus = false;
                     if (data.status === 'COMPLETED') {
-                        clearInterval(interval);
                         handlePaymentSuccess(data);
                     } else if (data.status === 'FAILED') {
-                        clearInterval(interval);
                         handlePaymentError(data);
                     }
                 })
                 .catch(err => {
+                    $checkingStatus = false;
                     console.error('Status check failed:', err);
                 });
-        }, 5000);
+        })();
     })
 
 </script>
 
 {#if user }
 
-    {#if transaction?.status !== "completed"}
+    {#if transaction?.status !== "completed" && !$checkingStatus}
         <PaymentForm
                 amount={parseInt(transaction?.amount || "0")}
                 onSuccess={handlePaymentSuccess}
@@ -51,6 +54,19 @@
                 transactionId={transaction?.id}
                 user={user}
         />
+    {:else if $checkingStatus}
+        <div class="container py-12">
+            <Card class="max-w-md mx-auto border-primary">
+                <CardContent class="flex flex-col gap-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold">Payment</h2>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <p class="text-lg text-primary">Checking payment status...</p>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     {:else }
         <div class="container py-12">
             <Card class="max-w-md mx-auto border-primary">

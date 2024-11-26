@@ -2,6 +2,9 @@
     import {type PageData} from './$types';
     import {Label} from "$lib/components/ui/label";
     import {Badge} from "$lib/components/ui/badge";
+    import {Button} from "$lib/components/ui/button";
+    import {toast} from "svelte-sonner";
+    import {writable} from "svelte/store";
 
     let {data}: { data: PageData } = $props();
 
@@ -19,6 +22,29 @@
             year: 'numeric'
         });
     };
+
+    let checkingStatus = writable(false);
+
+    const checkStatus = async (id: string) => {
+        $checkingStatus = true;
+        await fetch(`/api/payments/${id}/status`)
+            .then(response => response.json())
+            .then(data => {
+                $checkingStatus = false;
+                if (data.status === 'COMPLETED') {
+                    toast.success('Payment completed successfully!');
+                } else if (data.status === 'FAILED') {
+                    toast.error('Payment failed');
+                }
+            })
+            .catch(err => {
+                $checkingStatus = false;
+                console.error('Status check failed:', err);
+                toast.error('Status check failed');
+            });
+        $checkingStatus = false;
+
+    }
 
 </script>
 
@@ -77,8 +103,22 @@
                                     {#if tx?.status === 'completed'}
                                         <Badge>✓ Paid</Badge>
                                     {:else}
-                                        <Badge variant="outline">
+                                        <Badge variant="outline" class="">
                                             {tx?.status || 'N/A'}
+                                            {#if tx?.status === "pending"}
+                                                <Button
+                                                        disabled={$checkingStatus}
+                                                        onclick={async () => {
+                                                            await checkStatus(tx.id);
+                                                        }}
+                                                        variant="ghost" size="sm" class="ml-2 text-sm">
+                                                    {#if $checkingStatus}
+                                                        Checking...
+                                                    {:else}
+                                                        Check Status
+                                                    {/if}
+                                                </Button>
+                                            {/if}
                                         </Badge>
                                     {/if}
                                 </td>
@@ -90,7 +130,7 @@
                 </div>
             {:else}
                 <div class="text-center py-8 text-gray-500">
-                    No RSVPs found
+                    No Transactions found
                 </div>
             {/if}
         </div>
