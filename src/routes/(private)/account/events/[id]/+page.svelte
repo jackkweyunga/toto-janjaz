@@ -216,7 +216,7 @@
                             bind:checked={$form.participation_permission}
                     />
                     <Label>
-                        I, the undersigned, give permission for my child to participate in the Nyerere Day Quest. *
+                        I, the undersigned, give permission for my child to participate in the Nyerere Day Quest.
                     </Label>
                 </div>
                 {#if $errors.participation_permission}
@@ -231,7 +231,7 @@
                     />
                     <Label class="leading-6">
                         I, the undersigned, give permission for my child's photos/videos to be taken and used
-                        for promotional purposes only. (optional)
+                        for promotional purposes only.
                     </Label>
                 </div>
                 {#if $errors.media_permission}
@@ -291,7 +291,7 @@
                             type="submit"
                             disabled={$delayed}
                     >
-                        {$delayed ? 'Submitting...' : 'RSVP'}
+                        {$delayed ? 'Submitting...' : 'Proceed'}
                     </Button>
                 </div>
             </div>
