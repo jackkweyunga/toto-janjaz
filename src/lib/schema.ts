@@ -1,8 +1,8 @@
 import * as z from "zod";
 
 const tanzaniaRegex = /^0[6-9][0-9]{8}$/;
-export const MAX_AGE = 17;
-export const MIN_AGE = 7;
+export const MAX_AGE = 12;
+export const MIN_AGE = 8;
 
 export const addChildSchema = z.object({
     fullName: z.string({

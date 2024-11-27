@@ -143,7 +143,7 @@
                 <Card.Footer class="flex justify-end">
                     <a href={`/account/events/${event.id}`}>
                         <Button>
-                            Register Child
+                            Register Child For The Event
                         </Button>
                     </a>
                 </Card.Footer>

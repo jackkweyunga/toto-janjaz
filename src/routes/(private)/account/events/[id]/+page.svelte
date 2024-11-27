@@ -144,7 +144,7 @@
         <Dialog.Root open={$isOpen} onOpenChange={(x) => $isOpen = x}>
             <Dialog.Trigger type="button" class={"w-full" + buttonVariants({ variant: "default" })}>
                 <Plus/>
-                Add Child
+                Add Child To Your Account
             </Dialog.Trigger>
             <Dialog.Content class="sm:max-w-[512px] h-[90vh] px-0">
                 <div class="px-4">
@@ -184,7 +184,7 @@
         {#if $currentStep === 1}
             <Card.Content class="space-y-6 border rounded">
                 <div>
-                    <h2 class="text-2xl font-semibold">Add the child you want to RSVP</h2>
+                    <h2 class="text-2xl font-semibold">Select the child you want to RSVP</h2>
                     <p class="font-thin">You can select more than one.</p>
                 </div>
 

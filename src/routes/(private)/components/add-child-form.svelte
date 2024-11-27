@@ -134,6 +134,7 @@
                             <Input min={MIN_AGE} max={MAX_AGE} type="number" {...props} bind:value={$formData.age}/>
                         {/snippet}
                     </Form.Control>
+                    <Form.Description>Age must be between 8-12</Form.Description>
                     <Form.FieldErrors/>
                 </Form.Field>
 

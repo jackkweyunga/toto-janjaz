@@ -74,7 +74,7 @@
                 throw new Error(data.message || 'Payment failed');
             }
 
-            success = 'Payment initiated successfully';
+            success = 'Payment initiated successfully, Please Check your phone to complete Authorisation!';
             transactionId = data.transactionId;
 
             // Start status checking
@@ -116,7 +116,7 @@
 
     <form on:submit|preventDefault={handleSubmit} class="space-y-4">
         <div>
-            <Label class="block text-sm font-medium text-gray-700">Name</Label>
+            <Label class="block text-sm font-medium text-gray-700">Parent/Guardian Name</Label>
             <Input
                     type="text"
                     bind:value={name}
