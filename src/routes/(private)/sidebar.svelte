@@ -84,7 +84,7 @@
                                     class=" text-sidebar-primary-foreground aspect-square flex items-center h-full justify-center rounded-lg"
                             >
 
-                                <div class=" w-12 h-12 rounded-md object-contain"
+                                <div class=" w-12 h-14 rounded-md object-contain"
                                 >
                                     <svg width="57" height="57" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         <circle cx="28.5" cy="28.5" r="28.5" fill="white"/>
