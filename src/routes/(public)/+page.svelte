@@ -10,6 +10,7 @@
     import zaidi from '$lib/assets/zaidi.png';
     import pea from '$lib/assets/pea.png';
     import KidVR from '$lib/assets/Kid_in_VR.png';
+    import Krescendo from '$lib/assets/Krescendo.png';
 
     import {Label} from "$lib/components/ui/label";
 
@@ -33,6 +34,10 @@
         {
             name: 'Pea',
             logo: pea
+        },
+        {
+            name: 'Krescendo',
+            logo: Krescendo
         }
     ]
 
